@@ -1,3 +1,5 @@
+import { VersionedTransaction } from "@solana/web3.js"
+
 export type SerializedTx = Uint8Array
 export type TxRequest = {
     transaction: SerializedTx
@@ -31,3 +33,4 @@ export type context = {
 }
 export type message = string
 export type meta = Record<string, any>
+export type DeserializedTx = VersionedTransaction
