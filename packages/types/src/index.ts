@@ -14,11 +14,13 @@ export type TxResponse = {
     signature?: string
     attempts: number
     logs: string[]
+    error?: string
 }
 export type SimulationResult = {
     success: boolean
     error?: string
     logs: string[]
+    transaction: DeserializedTx
 }
 export type RpcEndpoint = {
     url: string

@@ -1,15 +1,18 @@
-import type { SimulationResult, DeserializedTx } from "@repo/types/index"
+import type { SimulationResult, DeserializedTx, SerializedTx } from "@repo/types/index"
 import {
     Connection,
-    clusterApiUrl
+    VersionedTransaction,
 } from "@solana/web3.js";
+import { SOLANA_ALCHEMY_RPC_URL } from "@repo/config/index"
 
-export async function simulateTx(tx: DeserializedTx): Promise<SimulationResult> {
-    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
-    const res = await connection.simulateTransaction(tx);
+export async function simulateTx(tx: SerializedTx): Promise<SimulationResult> {
+    const connection = new Connection(SOLANA_ALCHEMY_RPC_URL, "confirmed");
+    let deserializedTx = VersionedTransaction.deserialize(tx);
+    const res = await connection.simulateTransaction(deserializedTx);
     return {
         success: !res.value?.err,
         error: res.value?.err ? JSON.stringify(res.value.err) : "none",
-        logs: res.value?.logs || []
+        logs: res.value?.logs || [],
+        transaction: deserializedTx
     }
 }
