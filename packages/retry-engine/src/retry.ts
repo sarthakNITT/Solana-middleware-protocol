@@ -1,10 +1,13 @@
-import type { context, SerializedTx, TxResponse } from "@repo/types/index"
+import type { DeserializedTx } from "@repo/types/index"
+import { rebuildTx } from "@repo/tx-builder/builder";
+import { sendTx } from "@repo/rpc-client/send"
 
-export function retryTx(tx: SerializedTx, context: context): TxResponse {
+export async function retryTx(tx: DeserializedTx) {
+    console.log("Called retryTx");
+    const newTx = await rebuildTx(tx);
+    const signature = await sendTx(newTx);
     return {
-        status: "success",
-        signature: "Hello",
-        attempts: 1,
-        logs: ["heelo"]
-    }
+        tx: newTx,
+        signature
+    };
 }

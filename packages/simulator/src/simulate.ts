@@ -6,6 +6,7 @@ import {
 import { SOLANA_DEVNET_RPC_URL } from "@repo/config/index"
 
 export async function simulateTx(tx: SerializedTx): Promise<SimulationResult> {
+    console.log(`Called simulateTx`);
     const connection = new Connection("https://api.devnet.solana.com", "confirmed");
     let deserializedTx = VersionedTransaction.deserialize(tx);
     const res = await connection.simulateTransaction(deserializedTx);
