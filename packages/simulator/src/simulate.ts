@@ -3,10 +3,10 @@ import {
     Connection,
     VersionedTransaction,
 } from "@solana/web3.js";
-import { SOLANA_ALCHEMY_RPC_URL } from "@repo/config/index"
+import { SOLANA_DEVNET_RPC_URL } from "@repo/config/index"
 
 export async function simulateTx(tx: SerializedTx): Promise<SimulationResult> {
-    const connection = new Connection(SOLANA_ALCHEMY_RPC_URL, "confirmed");
+    const connection = new Connection("https://api.devnet.solana.com", "confirmed");
     let deserializedTx = VersionedTransaction.deserialize(tx);
     const res = await connection.simulateTransaction(deserializedTx);
     return {

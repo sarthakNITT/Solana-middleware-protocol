@@ -5,19 +5,22 @@ import { getTxStatus } from "@repo/rpc-client/status"
 
 export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
     const serialisedTransaction = req.transaction;
-    const simulate_result = await simulateTx(serialisedTransaction);
+    const txBytes =
+        typeof serialisedTransaction === "string"
+            ? Buffer.from(serialisedTransaction, "base64")
+            : serialisedTransaction;
+    const simulate_result = await simulateTx(txBytes);
     const deserializedTransaction = simulate_result.transaction;
     if (simulate_result.success) {
         const signature = await sendTx(deserializedTransaction)
-        const parsedSignature = JSON.parse(signature);
         return new Promise((resolve) => {
             const interval = setInterval(async () => {
-                const status = await getTxStatus(parsedSignature);
+                const status = await getTxStatus(signature);
                 if (status === "confirmed") {
                     clearInterval(interval);
                     resolve({
                         status: "success",
-                        signature: parsedSignature,
+                        signature: signature,
                         attempts: 1,
                         logs: simulate_result.logs,
                         error: "none"
@@ -26,7 +29,7 @@ export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
                     clearInterval(interval);
                     resolve({
                         status: "failed",
-                        signature: parsedSignature,
+                        signature: signature,
                         attempts: 1,
                         logs: ["Transaction failed"],
                         error: "Transaction failed"

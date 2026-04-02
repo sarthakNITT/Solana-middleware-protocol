@@ -1,1 +1,2 @@
 export const SOLANA_ALCHEMY_RPC_URL = "https://solana-mainnet.g.alchemy.com/v2/zHJtGhgb5h3-lIb9aoIlM"
+export const SOLANA_DEVNET_RPC_URL = "https://api.devnet.solana.com" // use it for testing from postman

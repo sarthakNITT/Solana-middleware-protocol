@@ -1,11 +1,11 @@
 import { Signature, TxStatus } from "@repo/types/index";
 import {
     Connection,
-    clusterApiUrl
 } from "@solana/web3.js";
+import { SOLANA_DEVNET_RPC_URL } from "@repo/config/index";
 
 export async function getTxStatus(signature: Signature): Promise<TxStatus> {
-    const connection = new Connection(clusterApiUrl("devnet"), "confirmed");
+    const connection = new Connection("https://api.devnet.solana.com", "confirmed");
     const response = await connection.getSignatureStatus(signature);
     const err = response.value?.err;
     if (err) {
@@ -15,7 +15,7 @@ export async function getTxStatus(signature: Signature): Promise<TxStatus> {
     if (status === "processed") {
         return "pending";
     }
-    else if (status === "confirmed" || "finalised") {
+    else if (status === "confirmed" || status === "finalized") {
         return "confirmed";
     }
     else if (!status) {
