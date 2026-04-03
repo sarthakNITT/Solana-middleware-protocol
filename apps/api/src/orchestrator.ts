@@ -22,9 +22,11 @@ export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
         } as TxResponse;
     }
 
-    let currentTx = simulate_result.transaction;
-    const optimizedTxWithFee = await optimizeFee(currentTx);
-    let signature = await sendTx(optimizedTxWithFee);
+    const currentTx = simulate_result.transaction;
+    const optimized = await optimizeFee(currentTx);
+    let optimizedTx = optimized.transaction;
+    let fee = optimized.fee;
+    let signature = await sendTx(optimizedTx);
     let attempts = 1;
     const maxRetries = req.options?.maxRetries ?? 3;
 
@@ -54,9 +56,10 @@ export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
                         error: "Transaction failed after all retries"
                     } as TxResponse);
                 } else {
-                    const retryResult = await retryTx(currentTx);
-                    currentTx = retryResult.tx;
+                    const retryResult = await retryTx(optimizedTx, fee);
+                    optimizedTx = retryResult.tx;
                     signature = retryResult.signature;
+                    fee = retryResult.fee;
                     attempts++;
                 }
             }

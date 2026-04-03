@@ -36,3 +36,7 @@ export type context = {
 export type message = string
 export type meta = Record<string, any>
 export type DeserializedTx = VersionedTransaction
+export type OptimizedTx = {
+    transaction: DeserializedTx
+    fee: number
+}

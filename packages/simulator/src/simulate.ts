@@ -1,14 +1,13 @@
-import type { SimulationResult, DeserializedTx, SerializedTx } from "@repo/types/index"
+import type { SimulationResult, SerializedTx } from "@repo/types/index"
 import {
     Connection,
     VersionedTransaction,
 } from "@solana/web3.js";
-import { SOLANA_DEVNET_RPC_URL } from "@repo/config/index"
 
 export async function simulateTx(tx: SerializedTx): Promise<SimulationResult> {
     console.log(`Called simulateTx`);
     const connection = new Connection("https://api.devnet.solana.com", "confirmed");
-    let deserializedTx = VersionedTransaction.deserialize(tx);
+    const deserializedTx = VersionedTransaction.deserialize(tx);
     const res = await connection.simulateTransaction(deserializedTx);
     return {
         success: !res.value?.err,
