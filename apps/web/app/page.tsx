@@ -2,7 +2,10 @@
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, useScroll, useTransform, useInView, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
+import Link from "next/link";
 import { CodeSnippetTabs } from "./components/CodeSnippetTabs";
+import { ArchitectureDiagram } from "./components/ArchitectureDiagram";
+import { MetricsCards } from "./components/MetricsCards";
 
 // ─── SVG Icons (monochrome, no emojis) ───────────────────────────────────────
 const Icons = {
@@ -759,17 +762,25 @@ export default function SendraPage() {
             <TiltLogo />
           </div>
           <div className="hidden md:flex items-center justify-center gap-8 text-[13px] text-white/32">
-            {[["#how", "How it works"], ["#features", "Features"], ["#demo", "Demo"]].map(([href, label]) => (
-              <a key={href} href={href}
-                className="relative hover:text-white/72 transition-colors duration-200 group">
-                {label}
-                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-white/28 group-hover:w-full transition-all duration-300" />
-              </a>
+            {([ ["#how", "How it works"], ["#features", "Features"], ["#arch", "Architecture"], ["/demo", "Demo →"] ] as [string, string][]).map(([href, label]) => (
+              href.startsWith("/") ? (
+                <Link key={href} href={href}
+                  className="relative hover:text-white/72 transition-colors duration-200 group">
+                  {label}
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-white/28 group-hover:w-full transition-all duration-300" />
+                </Link>
+              ) : (
+                <a key={href} href={href}
+                  className="relative hover:text-white/72 transition-colors duration-200 group">
+                  {label}
+                  <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-white/28 group-hover:w-full transition-all duration-300" />
+                </a>
+              )
             ))}
           </div>
           <div className="flex flex-1 items-center justify-end gap-2">
             <GhostButton>Read docs</GhostButton>
-            <PrimaryButton>Get started</PrimaryButton>
+            <Link href="/demo"><PrimaryButton>Try Demo</PrimaryButton></Link>
           </div>
         </nav>
       </header>
@@ -827,12 +838,14 @@ export default function SendraPage() {
             transition={{ duration: 0.55, delay: 0.27 }}
             className="flex flex-col sm:flex-row items-center gap-2.5 justify-center"
           >
-            <PrimaryButton>
-              Try Demo
-              <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                <path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </PrimaryButton>
+            <Link href="/demo">
+              <PrimaryButton>
+                Try Demo
+                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                  <path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </PrimaryButton>
+            </Link>
             <GhostButton>
               Read the docs
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
@@ -931,6 +944,45 @@ export default function SendraPage() {
         </div>
       </section>
 
+      {/* ── Architecture Diagram ── */}
+      <section id="arch" className="relative z-10">
+        <Divider />
+        <div className="max-w-5xl mx-auto px-6 py-24">
+          <div className="text-center mb-14">
+            <div className="text-[10px] font-mono text-white/20 uppercase tracking-[0.2em] mb-3">System Design</div>
+            <h2 className="text-3xl md:text-[40px] font-light text-white leading-tight">Architecture</h2>
+            <p className="text-white/28 text-[14px] mt-3 max-w-md mx-auto">
+              User → Sendra API → Simulator → Fee Optimizer → Router → RPC → Blockchain
+            </p>
+          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="rounded-2xl p-6 md:p-8 overflow-x-auto"
+            style={{
+              background: "linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 100%)",
+              border: "1px solid rgba(255,255,255,0.07)",
+            }}
+          >
+            <ArchitectureDiagram />
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ── Metrics ── */}
+      <section className="relative z-10">
+        <Divider />
+        <div className="max-w-5xl mx-auto px-6 py-24">
+          <div className="text-center mb-14">
+            <div className="text-[10px] font-mono text-white/20 uppercase tracking-[0.2em] mb-3">Performance</div>
+            <h2 className="text-3xl md:text-[40px] font-light text-white leading-tight">Built for reliability</h2>
+          </div>
+          <MetricsCards />
+        </div>
+      </section>
+
       {/* ── Demo ── */}
       <section id="demo" className="relative z-10">
         <Divider />
@@ -962,13 +1014,17 @@ export default function SendraPage() {
               Integrate Sendra in minutes. Drop-in SDK, zero infrastructure changes.
             </p>
             <div className="flex flex-col sm:flex-row items-center gap-2.5 justify-center">
-              <PrimaryButton>
-                Start building
-                <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                  <path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </PrimaryButton>
-              <GhostButton>View on GitHub</GhostButton>
+              <Link href="/demo">
+                <PrimaryButton>
+                  Try Demo
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+                    <path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </PrimaryButton>
+              </Link>
+              <a href="https://github.com" target="_blank" rel="noopener noreferrer">
+                <GhostButton>View on GitHub</GhostButton>
+              </a>
             </div>
           </motion.div>
         </div>

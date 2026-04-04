@@ -134,7 +134,7 @@ const customTheme = {
 
 // ─── CodeSnippetTabs ──────────────────────────────────────────────────────────
 export function CodeSnippetTabs() {
-  const [active, setActive] = useState<TabKey>("curl");
+  const [active, setActive] = useState<TabKey>("rust");
   const [copied, setCopied] = useState(false);
 
   const activeTab = TABS.find((t) => t.key === active)!;
