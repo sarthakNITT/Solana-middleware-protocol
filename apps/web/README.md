@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/create-next-app).
+# Sendra — Landing Page
+
+A premium, dark-themed landing page for Sendra — a Solana transaction reliability layer.
+
+## Stack
+
+- **Next.js 14** (App Router)
+- **Tailwind CSS**
+- **Framer Motion** (scroll animations, entrance animations)
+- **DM Sans** + **JetBrains Mono** (Google Fonts)
+
+## Project Structure
+
+```
+app/
+  layout.tsx       ← Root layout with font imports
+  page.tsx         ← Main landing page (all components inline)
+  globals.css      ← Tailwind base + font config
+tailwind.config.ts
+package.json
+```
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+# 1. Install dependencies
+npm install
+
+# 2. Run development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# 3. Open http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## File placement
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Place these files in your Next.js App Router project:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+| File            | Destination         |
+|-----------------|---------------------|
+| `page.tsx`      | `app/page.tsx`      |
+| `layout.tsx`    | `app/layout.tsx`    |
+| `globals.css`   | `app/globals.css`   |
+| `tailwind.config.ts` | root          |
+| `package.json`  | root                |
 
-## Learn More
+## Sections
 
-To learn more about Next.js, take a look at the following resources:
+1. **Hero** — Bold heading with parallax fade-out, stats strip
+2. **Scroll-Lit Text** — Words light up from grey → white on scroll (Framer Motion `useScroll`)
+3. **Pipeline Flow** — Simulate → Optimize → Route → Send → Retry
+4. **Features Grid** — 4 core capability cards with hover glows
+5. **Demo Terminal** — Animated live log stream with restart button
+6. **CTA Band** — Final call to action
+7. **Footer** — Minimal
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Key Design Decisions
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **Color**: Pure `#080808` base, subtle `indigo-500` accent glow
+- **Typography**: DM Sans (light/extralight headings), JetBrains Mono (terminal, labels)
+- **Grid background**: SVG dot grid at 3.5% opacity with radial gradient overlay
+- **Animations**: All entrance animations use `useInView` with `once: true`
