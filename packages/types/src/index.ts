@@ -25,7 +25,7 @@ export type SimulationResult = {
 export type RpcEndpoint = {
     url: string
     latency?: number
-    successRate?: number
+    successRate?: boolean
 }
 export type Signature = string
 export type TxStatus = "pending" | "confirmed" | "failed"

@@ -7,13 +7,7 @@ import {
 } from "@repo/config/index";
 import { Connection } from "@solana/web3.js"
 
-export async function selectRpc(): Promise<RpcEndpoint["url"]> {
-    const RPCS: string[] = [
-        SOLANA_ALCHEMY_RPC_URL,
-        SOLANA_DEVNET_RPC_URL,
-        SOLANA_HELIUS_RPC_URL,
-        SOLANA_QUICKNODE_RPC_URL
-    ];
+export async function selectRpc(): Promise<RpcEndpoint> {
     const connectionWithDevnet = new Connection(`${SOLANA_DEVNET_RPC_URL}`, "confirmed");
     const connectionWithAlchemy = new Connection(`${SOLANA_ALCHEMY_RPC_URL}`, "confirmed");
     const connectionWithHelius = new Connection(`${SOLANA_HELIUS_RPC_URL}`, "confirmed");
@@ -75,8 +69,15 @@ export async function selectRpc(): Promise<RpcEndpoint["url"]> {
         .sort((a, b) => a.timeTaken - b.timeTaken);
 
     if (latency.length === 0 || latency === undefined) {
-        return "No RPC Available";
+        return {
+            url: "No RPC Available",
+            latency: 0,
+            successRate: false
+        };
     }
-    const bestRpc = latency[0]!.rpc;
-    return bestRpc;
+    return {
+        url: latency[0]!.rpc,
+        latency: latency[0]!.timeTaken,
+        successRate: latency[0]!.success
+    };
 }

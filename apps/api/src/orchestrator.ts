@@ -1,9 +1,11 @@
-import type { TxRequest, TxResponse } from "@repo/types/index"
-import { simulateTx } from "@repo/simulator/simulate"
-import { sendTx } from "@repo/rpc-client/send"
-import { getTxStatus } from "@repo/rpc-client/status"
-import { retryTx } from "@repo/retry-engine/retry"
-import { optimizeFee } from "@repo/fee-optimizer/optimize"
+import type { TxRequest, TxResponse } from "@repo/types/index";
+import { simulateTx } from "@repo/simulator/simulate";
+import { sendTx } from "@repo/rpc-client/send";
+import { getTxStatus } from "@repo/rpc-client/status";
+import { retryTx } from "@repo/retry-engine/retry";
+import { optimizeFee } from "@repo/fee-optimizer/optimize";
+import { selectRpc } from "@repo/router/router";
+
 export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
     console.log("Called HandleTx");
     const serialisedTransaction = req.transaction;
@@ -26,7 +28,8 @@ export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
     const optimized = await optimizeFee(currentTx);
     let optimizedTx = optimized.transaction;
     let fee = optimized.fee;
-    let signature = await sendTx(optimizedTx);
+    const RPC_URL = await selectRpc();
+    let signature = await sendTx(optimizedTx, RPC_URL);
     let attempts = 1;
     const maxRetries = req.options?.maxRetries ?? 3;
 
@@ -36,7 +39,7 @@ export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
             console.log(`signature: ${signature}`);
             console.log(`attempts: ${attempts}`);
             console.log(`maxRetries: ${maxRetries}`);
-            const status = await getTxStatus(signature);
+            const status = await getTxStatus(signature, RPC_URL);
             if (status === "confirmed") {
                 clearInterval(interval);
                 resolve({

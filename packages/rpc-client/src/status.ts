@@ -1,12 +1,12 @@
-import { Signature, TxStatus } from "@repo/types/index";
+import { RpcEndpoint, Signature, TxStatus } from "@repo/types/index";
 import {
     Connection,
 } from "@solana/web3.js";
 import { SOLANA_DEVNET_RPC_URL } from "@repo/config/index";
 
-export async function getTxStatus(signature: Signature): Promise<TxStatus> {
+export async function getTxStatus(signature: Signature, RPC_URL: RpcEndpoint): Promise<TxStatus> {
     console.log("called getTxStatus");
-    const connection = new Connection("https://api.devnet.solana.com", "confirmed");
+    const connection = new Connection(`${RPC_URL.url}`, "confirmed");
     const response = await connection.getSignatureStatus(signature);
     const err = response.value?.err;
     if (err) {
