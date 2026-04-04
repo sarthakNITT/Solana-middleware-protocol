@@ -7,106 +7,172 @@ import { motion, useScroll, useTransform, useInView, AnimatePresence, useMotionV
 const Icons = {
   Simulate: () => (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <path d="M3 11C3 6.58 6.58 3 11 3s8 3.58 8 8-3.58 8-8 8-8-3.58-8-8Z" stroke="currentColor" strokeWidth="1.2" strokeOpacity="0.5"/>
-      <path d="M7 11l3 3 5-5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3 11C3 6.58 6.58 3 11 3s8 3.58 8 8-3.58 8-8 8-8-3.58-8-8Z" stroke="currentColor" strokeWidth="1.2" strokeOpacity="0.5" />
+      <path d="M7 11l3 3 5-5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   Optimize: () => (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <path d="M4 16l4-4 3 3 4-5 3 2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.9"/>
-      <path d="M18 8V6h-2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.5"/>
+      <path d="M4 16l4-4 3 3 4-5 3 2" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.9" />
+      <path d="M18 8V6h-2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.5" />
     </svg>
   ),
   Route: () => (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <circle cx="4" cy="11" r="1.5" fill="currentColor" fillOpacity="0.6"/>
-      <circle cx="18" cy="6" r="1.5" fill="currentColor"/>
-      <circle cx="18" cy="16" r="1.5" fill="currentColor" fillOpacity="0.5"/>
-      <path d="M5.5 11H10l2.5-5H16.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.9"/>
-      <path d="M5.5 11H10l2.5 5H16.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/>
+      <circle cx="4" cy="11" r="1.5" fill="currentColor" fillOpacity="0.6" />
+      <circle cx="18" cy="6" r="1.5" fill="currentColor" />
+      <circle cx="18" cy="16" r="1.5" fill="currentColor" fillOpacity="0.5" />
+      <path d="M5.5 11H10l2.5-5H16.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.9" />
+      <path d="M5.5 11H10l2.5 5H16.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.5" />
     </svg>
   ),
   Send: () => (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <path d="M3 11l16-7-6 7 6 7-16-7Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" strokeOpacity="0.9"/>
-      <path d="M13 11H9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.4"/>
+      <path d="M3 11l16-7-6 7 6 7-16-7Z" stroke="currentColor" strokeWidth="1.3" strokeLinejoin="round" strokeOpacity="0.9" />
+      <path d="M13 11H9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeOpacity="0.4" />
     </svg>
   ),
   Retry: () => (
     <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-      <path d="M4.5 11A6.5 6.5 0 0 1 17 7.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.6"/>
-      <path d="M17.5 11A6.5 6.5 0 0 1 5 14.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round"/>
-      <path d="M15 5.5l2 2 2-2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.6"/>
-      <path d="M3 12.5l2 2 2-2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M4.5 11A6.5 6.5 0 0 1 17 7.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeOpacity="0.6" />
+      <path d="M17.5 11A6.5 6.5 0 0 1 5 14.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M15 5.5l2 2 2-2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.6" />
+      <path d="M3 12.5l2 2 2-2" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   SimulationFeat: () => (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <rect x="1.5" y="1.5" width="15" height="15" rx="3" stroke="currentColor" strokeWidth="1.1" strokeOpacity="0.3"/>
-      <path d="M5 9l3 3 5-5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+      <rect x="1.5" y="1.5" width="15" height="15" rx="3" stroke="currentColor" strokeWidth="1.1" strokeOpacity="0.3" />
+      <path d="M5 9l3 3 5-5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   FeeFeat: () => (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M3 12.5l3-3.5 2.5 2.5L12 6l3 2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3 12.5l3-3.5 2.5 2.5L12 6l3 2" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   RouteFeat: () => (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <circle cx="3" cy="9" r="1.2" fill="currentColor" fillOpacity="0.5"/>
-      <circle cx="15" cy="4.5" r="1.2" fill="currentColor"/>
-      <circle cx="15" cy="13.5" r="1.2" fill="currentColor" fillOpacity="0.5"/>
-      <path d="M4.2 9H8l2-4.5H13.8" stroke="currentColor" strokeWidth="1" strokeLinecap="round"/>
-      <path d="M4.2 9H8l2 4.5H13.8" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.5"/>
+      <circle cx="3" cy="9" r="1.2" fill="currentColor" fillOpacity="0.5" />
+      <circle cx="15" cy="4.5" r="1.2" fill="currentColor" />
+      <circle cx="15" cy="13.5" r="1.2" fill="currentColor" fillOpacity="0.5" />
+      <path d="M4.2 9H8l2-4.5H13.8" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
+      <path d="M4.2 9H8l2 4.5H13.8" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeOpacity="0.5" />
     </svg>
   ),
   RetryFeat: () => (
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-      <path d="M3.5 9A5.5 5.5 0 0 1 13 5.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeOpacity="0.6"/>
-      <path d="M14.5 9A5.5 5.5 0 0 1 5 12.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round"/>
-      <path d="M11.5 4l2 1.5 1.5-2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.6"/>
-      <path d="M2.5 10.5l1.5 2 2-1.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M3.5 9A5.5 5.5 0 0 1 13 5.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeOpacity="0.6" />
+      <path d="M14.5 9A5.5 5.5 0 0 1 5 12.5" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" />
+      <path d="M11.5 4l2 1.5 1.5-2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" strokeOpacity="0.6" />
+      <path d="M2.5 10.5l1.5 2 2-1.5" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
   Logo: () => (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-      <rect width="28" height="28" rx="7" fill="white" fillOpacity="0.06"/>
-      <rect width="28" height="28" rx="7" stroke="white" strokeOpacity="0.1" strokeWidth="0.75"/>
-      <path d="M8 10.5C8 9.12 9.12 8 10.5 8h7C18.88 8 20 9.12 20 10.5c0 1.38-1.12 2.5-2.5 2.5H10.5C9.12 13 8 14.12 8 15.5 8 16.88 9.12 18 10.5 18h7C18.88 18 20 16.88 20 15.5"
-        stroke="white" strokeWidth="1.6" strokeLinecap="round"/>
-    </svg>
+    <img src="/logo.png" alt="Sendra Logo" width="55" height="55" className="rounded-md object-contain" />
   ),
 };
 
 // ─── Premium Buttons ──────────────────────────────────────────────────────────
+
+const DECODE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()";
+
+function DecoderText({ text, isHovered }: { text: string; isHovered: boolean }) {
+  const [displayText, setDisplayText] = useState(text);
+
+  useEffect(() => {
+    if (!isHovered) {
+      setDisplayText(text);
+      return;
+    }
+
+    let iteration = 0;
+    // Lower divisor or minimum value here reduces the left-to-right reading speed
+    const charsPerTick = Math.max(text.length / 30, 0.2);
+    let interval: ReturnType<typeof setInterval>;
+
+    const tick = () => {
+      setDisplayText(() => {
+        return text
+          .split("")
+          .map((char, index) => {
+            if (char === " ") return " ";
+            if (index < iteration) return text[index];
+            return DECODE_CHARS[Math.floor(Math.random() * DECODE_CHARS.length)];
+          })
+          .join("");
+      });
+
+      if (iteration >= text.length) {
+        clearInterval(interval);
+      }
+      iteration += charsPerTick;
+    };
+
+    interval = setInterval(tick, 30);
+    return () => clearInterval(interval);
+  }, [isHovered, text]);
+
+  return (
+    <span className="relative inline-flex flex-col items-center justify-center">
+      <span className={isHovered ? "opacity-0 pointer-events-none whitespace-pre" : "whitespace-pre"}>{text}</span>
+      {isHovered && (
+        <span className="absolute w-full font-mono tracking-tighter flex items-center justify-center whitespace-pre text-[11px] text-center">
+          {displayText}
+        </span>
+      )}
+    </span>
+  );
+}
+
 function PrimaryButton({ children, onClick }: { children: React.ReactNode; onClick?: () => void }) {
+  const [isHovered, setIsHovered] = useState(false);
+
+  const renderChildren = () => {
+    const arr = Array.isArray(children) ? children : [children];
+    return arr.map((child, i) => {
+      if (typeof child === "string") {
+        return <DecoderText key={i} text={child} isHovered={isHovered} />;
+      }
+      return child;
+    });
+  };
+
   return (
     <motion.button
       onClick={onClick}
-      whileHover={{ scale: 1.035 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.25, ease: "easeInOut" }}
       className="relative group px-4.5 py-2 rounded-lg bg-white text-black text-[12.5px] font-semibold overflow-hidden"
       style={{
         boxShadow: "0 0 0 1px rgba(255,255,255,0.9), 0 2px 8px rgba(0,0,0,0.3)",
       }}
     >
-      {/* Hover shimmer */}
+      {/* Hover gradient shimmer */}
       <motion.div
         className="absolute inset-0"
-        style={{ background: "linear-gradient(135deg, #fff 0%, #dde0ff 50%, #fff 100%)" }}
+        style={{ background: "linear-gradient(135deg, #ffffff 0%, #eef0ff 50%, #ffffff 100%)" }}
         initial={{ opacity: 0 }}
         whileHover={{ opacity: 1 }}
-        transition={{ duration: 0.22 }}
+        transition={{ duration: 0.25, ease: "easeInOut" }}
       />
-      {/* Glow on hover */}
+      {/* Shine sweep effect */}
+      <div
+        className="absolute top-0 -left-[120%] w-[60%] h-full transform -skew-x-12 bg-gradient-to-r from-transparent via-indigo-100/60 to-transparent group-hover:left-[150%] transition-all duration-700 ease-in-out"
+      />
+      {/* Soft Glow */}
       <motion.div
-        className="absolute inset-0 rounded-lg"
-        initial={{ boxShadow: "0 0 0px rgba(255,255,255,0)" }}
-        whileHover={{ boxShadow: "0 0 20px rgba(255,255,255,0.28), 0 0 40px rgba(99,102,241,0.14)" }}
-        transition={{ duration: 0.25 }}
+        className="absolute inset-0 rounded-lg pointer-events-none"
+        initial={{ boxShadow: "0 0 0px rgba(99,102,241,0)" }}
+        whileHover={{ boxShadow: "0 0 15px rgba(99,102,241,0.25), 0 0 30px rgba(99,102,241,0.1)" }}
+        transition={{ duration: 0.25, ease: "easeInOut" }}
       />
-      <span className="relative z-10 flex items-center gap-1.5">{children}</span>
+      <span className="relative z-10 flex items-center gap-1.5 group-hover:text-indigo-950 transition-colors duration-200">
+        {renderChildren()}
+      </span>
     </motion.button>
   );
 }
@@ -115,23 +181,27 @@ function GhostButton({ children, onClick }: { children: React.ReactNode; onClick
   return (
     <motion.button
       onClick={onClick}
-      whileHover={{ scale: 1.025 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+      whileHover={{ scale: 1.04 }}
+      whileTap={{ scale: 0.98 }}
+      transition={{ duration: 0.25, ease: "easeInOut" }}
       className="relative group px-4.5 py-2 rounded-lg text-[12.5px] text-white/40 overflow-hidden"
     >
-      {/* Animated border */}
+      {/* Animated border/glow */}
       <motion.span
         className="absolute inset-0 rounded-lg"
         style={{ border: "1px solid rgba(255,255,255,0.09)" }}
         whileHover={{
           border: "1px solid rgba(255,255,255,0.2)",
-          backgroundColor: "rgba(255,255,255,0.035)",
-          boxShadow: "0 0 14px rgba(255,255,255,0.04), inset 0 0 10px rgba(255,255,255,0.02)",
+          backgroundColor: "rgba(255,255,255,0.04)",
+          boxShadow: "0 0 14px rgba(255,255,255,0.05), inset 0 0 10px rgba(255,255,255,0.02)",
         }}
-        transition={{ duration: 0.22 }}
+        transition={{ duration: 0.25, ease: "easeInOut" }}
       />
-      <span className="relative z-10 flex items-center gap-1.5 group-hover:text-white/72 transition-colors duration-200">
+      {/* Shine sweep effect */}
+      <div
+        className="absolute top-0 -left-[120%] w-[60%] h-full transform -skew-x-12 bg-gradient-to-r from-transparent via-white/10 to-transparent group-hover:left-[150%] transition-all duration-700 ease-in-out"
+      />
+      <span className="relative z-10 flex items-center gap-1.5 group-hover:text-white/90 transition-colors duration-200">
         {children}
       </span>
     </motion.button>
@@ -157,10 +227,10 @@ function TiltLogo() {
         y.set(e.clientY - r.top - r.height / 2);
       }}
       onMouseLeave={() => { x.set(0); y.set(0); }}
-      className="flex items-center gap-2.5 cursor-default select-none"
+      className="flex items-center cursor-default select-none"
     >
       <Icons.Logo />
-      <span className="font-semibold text-[13.5px] tracking-wide text-white/90">Sendra</span>
+      <span className="-ml-3 font-semibold text-[13.5px] tracking-wide text-white/90">Sendra</span>
     </motion.div>
   );
 }
@@ -173,10 +243,10 @@ function HeroBackground() {
       <svg className="absolute inset-0 w-full h-full opacity-[0.045]" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="herogrid" width="64" height="64" patternUnits="userSpaceOnUse">
-            <path d="M 64 0 L 0 0 0 64" fill="none" stroke="white" strokeWidth="0.6"/>
+            <path d="M 64 0 L 0 0 0 64" fill="none" stroke="white" strokeWidth="0.6" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#herogrid)"/>
+        <rect width="100%" height="100%" fill="url(#herogrid)" />
       </svg>
 
       {/* Radial vignette to fade grid edges */}
@@ -258,10 +328,10 @@ function PageBackground() {
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" className="opacity-[0.02]">
         <defs>
           <pattern id="pg" width="60" height="60" patternUnits="userSpaceOnUse">
-            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" strokeWidth="0.4"/>
+            <path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" strokeWidth="0.4" />
           </pattern>
         </defs>
-        <rect width="100%" height="100%" fill="url(#pg)"/>
+        <rect width="100%" height="100%" fill="url(#pg)" />
       </svg>
       {/* Subtle bottom-centre accent glow */}
       <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] rounded-full opacity-[0.035]"
@@ -311,10 +381,10 @@ function ScrollLitText() {
           // Spread words across 0.15→0.65. Each word windows is narrow for crisp stagger.
           // First word lights at 15% scroll, last finishes by 65% — all while in view.
           const BAND_START = 0.15;
-          const BAND_END   = 0.65;
-          const span       = BAND_END - BAND_START;
-          const wStart     = BAND_START + (i / n) * span;
-          const wEnd       = Math.min(wStart + (span / n) * 2.0, 0.68);
+          const BAND_END = 0.65;
+          const span = BAND_END - BAND_START;
+          const wStart = BAND_START + (i / n) * span;
+          const wEnd = Math.min(wStart + (span / n) * 2.0, 0.68);
           return (
             <ScrollWord key={i} word={word} progress={scrollYProgress} start={wStart} end={wEnd} />
           );
@@ -337,10 +407,10 @@ function ScrollWord({ word, progress, start, end }: {
 
   // Combined blur + drop-shadow glow: blurry/dim when not yet reached → sharp + glowing
   const combinedFilter = useTransform(progress, (v: number) => {
-    const t     = Math.max(0, Math.min(1, (v - start) / range));
-    const blur  = ((1 - t) * 5).toFixed(2);
+    const t = Math.max(0, Math.min(1, (v - start) / range));
+    const blur = ((1 - t) * 5).toFixed(2);
     const gAlpha = (t * 0.32).toFixed(2);
-    const gSize  = (t * 10).toFixed(1);
+    const gSize = (t * 10).toFixed(1);
     // Only apply glow when mostly highlighted to keep it subtle
     return t > 0.3
       ? `blur(${blur}px) drop-shadow(0 0 ${gSize}px rgba(139,92,246,${gAlpha}))`
@@ -361,7 +431,7 @@ function ScrollWord({ word, progress, start, end }: {
 const pipelineIcons: React.FC[] = [Icons.Simulate, Icons.Optimize, Icons.Route, Icons.Send, Icons.Retry];
 
 function PipelineStep({ label, desc, index }: { label: string; desc: string; index: number }) {
-  const ref  = useRef(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
   const Icon = pipelineIcons[index] as React.FC;
 
@@ -425,9 +495,9 @@ function PipelineStep({ label, desc, index }: { label: string; desc: string; ind
 const featureIcons: React.FC[] = [Icons.SimulationFeat, Icons.FeeFeat, Icons.RouteFeat, Icons.RetryFeat];
 
 function FeatureCard({ title, desc, tag, index }: { title: string; desc: string; tag: string; index: number }) {
-  const ref    = useRef(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
-  const Icon   = featureIcons[index] as React.FC;
+  const Icon = featureIcons[index] as React.FC;
 
   return (
     <motion.div
@@ -483,21 +553,21 @@ function FeatureCard({ title, desc, tag, index }: { title: string; desc: string;
 
 // ─── Product Visualization Box ────────────────────────────────────────────────
 const vizSteps = [
-  { label: "Simulating transaction...",       status: "running" },
-  { label: "Simulation passed ✓",             status: "done"    },
-  { label: "Optimizing fee (CU scan)...",     status: "running" },
-  { label: "Fee: 0.000031 SOL (-42%) ✓",      status: "done"    },
-  { label: "Routing to fastest RPC...",       status: "running" },
-  { label: "ny1.helius-rpc.com (12ms) ✓",     status: "done"    },
-  { label: "Sending...",                      status: "running" },
-  { label: "Attempt 1 timeout — retrying",   status: "warn"    },
-  { label: "Confirmed in slot 312,847,291 ✓", status: "done"    },
+  { label: "Simulating transaction...", status: "running" },
+  { label: "Simulation passed ✓", status: "done" },
+  { label: "Optimizing fee (CU scan)...", status: "running" },
+  { label: "Fee: 0.000031 SOL (-42%) ✓", status: "done" },
+  { label: "Routing to fastest RPC...", status: "running" },
+  { label: "ny1.helius-rpc.com (12ms) ✓", status: "done" },
+  { label: "Sending...", status: "running" },
+  { label: "Attempt 1 timeout — retrying", status: "warn" },
+  { label: "Confirmed in slot 312,847,291 ✓", status: "done" },
 ];
 
 function ProductVizBox() {
-  const [step, setStep]       = useState(0);
+  const [step, setStep] = useState(0);
   const [running, setRunning] = useState(false);
-  const ref    = useRef(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   const runSeq = useCallback(() => {
@@ -513,12 +583,12 @@ function ProductVizBox() {
 
   const statusColor = (s: string) =>
     s === "done" ? "bg-emerald-400 text-emerald-400" :
-    s === "warn" ? "bg-amber-400 text-amber-400" :
-    "bg-white/18 text-white/42";
+      s === "warn" ? "bg-amber-400 text-amber-400" :
+        "bg-white/18 text-white/42";
 
   const textColor = (s: string) =>
     s === "done" ? "text-emerald-400" :
-    s === "warn" ? "text-amber-400" : "text-white/42";
+      s === "warn" ? "text-amber-400" : "text-white/42";
 
   return (
     <section ref={ref} className="py-24 px-6">
@@ -601,7 +671,7 @@ function ProductVizBox() {
                 </AnimatePresence>
                 {running && step < vizSteps.length && (
                   <div className="flex gap-1 pl-4 pt-0.5">
-                    {[0,1,2].map(i => (
+                    {[0, 1, 2].map(i => (
                       <motion.div key={i} className="w-1 h-1 rounded-full bg-white/16"
                         animate={{ opacity: [0.16, 0.65, 0.16] }}
                         transition={{ duration: 1, repeat: Infinity, delay: i * 0.2 }}
@@ -622,10 +692,10 @@ function ProductVizBox() {
               <div className="flex gap-7 px-4 py-3 border-t border-white/[0.04]"
                 style={{ background: "rgba(0,0,0,0.22)" }}>
                 {[
-                  ["Status",   step >= vizSteps.length ? "Confirmed" : running ? "Relaying" : "Idle",
-                               step >= vizSteps.length ? "text-emerald-400" : "text-white/38"],
+                  ["Status", step >= vizSteps.length ? "Confirmed" : running ? "Relaying" : "Idle",
+                    step >= vizSteps.length ? "text-emerald-400" : "text-white/38"],
                   ["Attempts", step >= 8 ? "2" : "1", "text-white/38"],
-                  ["Slot",     step >= vizSteps.length ? "312,847,291" : "—", "text-white/38"],
+                  ["Slot", step >= vizSteps.length ? "312,847,291" : "—", "text-white/38"],
                 ].map(([label, val, cls]) => (
                   <div key={label as string}>
                     <div className="text-[8px] text-white/18 uppercase tracking-widest font-mono">{label}</div>
@@ -647,22 +717,22 @@ function ProductVizBox() {
 
 // ─── Demo Terminal ────────────────────────────────────────────────────────────
 const demoLogs = [
-  { type: "info",    text: "Initializing transaction simulation...",        delay: 0    },
-  { type: "success", text: "Simulation passed — no revert detected",         delay: 900  },
-  { type: "info",    text: "Computing optimal compute unit price...",         delay: 1700 },
-  { type: "success", text: "Fee optimized: 0.000031 SOL (saved 42%)",        delay: 2600 },
-  { type: "info",    text: "Selecting best RPC endpoint (latency scan)...",   delay: 3400 },
-  { type: "success", text: "Routed to primary: ny1.helius-rpc.com (12ms)",   delay: 4200 },
-  { type: "info",    text: "Sending transaction...",                          delay: 5000 },
-  { type: "warn",    text: "Attempt 1 timed out — switching RPC node",       delay: 5900 },
-  { type: "info",    text: "Retrying via fallback: fra1.helius-rpc.com...",  delay: 6700 },
-  { type: "success", text: "✓ Confirmed in slot 312,847,291 (1.2s)",         delay: 7600 },
+  { type: "info", text: "Initializing transaction simulation...", delay: 0 },
+  { type: "success", text: "Simulation passed — no revert detected", delay: 900 },
+  { type: "info", text: "Computing optimal compute unit price...", delay: 1700 },
+  { type: "success", text: "Fee optimized: 0.000031 SOL (saved 42%)", delay: 2600 },
+  { type: "info", text: "Selecting best RPC endpoint (latency scan)...", delay: 3400 },
+  { type: "success", text: "Routed to primary: ny1.helius-rpc.com (12ms)", delay: 4200 },
+  { type: "info", text: "Sending transaction...", delay: 5000 },
+  { type: "warn", text: "Attempt 1 timed out — switching RPC node", delay: 5900 },
+  { type: "info", text: "Retrying via fallback: fra1.helius-rpc.com...", delay: 6700 },
+  { type: "success", text: "✓ Confirmed in slot 312,847,291 (1.2s)", delay: 7600 },
 ];
 
 function DemoTerminal() {
   const [visible, setVisible] = useState<number[]>([]);
   const [running, setRunning] = useState(false);
-  const ref    = useRef(null);
+  const ref = useRef(null);
   const inView = useInView(ref, { once: true });
 
   const restart = useCallback(() => {
@@ -679,10 +749,10 @@ function DemoTerminal() {
     demoLogs.forEach((log, i) => setTimeout(() => setVisible(v => [...v, i]), log.delay));
   }, [inView]);
 
-  const colorMap: Record<string,string> = {
+  const colorMap: Record<string, string> = {
     info: "text-white/42", success: "text-emerald-400", warn: "text-amber-400", error: "text-red-400",
   };
-  const dotMap: Record<string,string> = {
+  const dotMap: Record<string, string> = {
     info: "bg-white/14", success: "bg-emerald-400", warn: "bg-amber-400", error: "bg-red-400",
   };
 
@@ -715,8 +785,8 @@ function DemoTerminal() {
             {[
               ["Attempts", visible.some(i => demoLogs[i]?.text.includes("Retry")) ? "2" : "1", "text-white/42"],
               ["Status",
-               visible.some(i => demoLogs[i]?.text.includes("Confirmed")) ? "Confirmed" : visible.length > 0 ? "Relaying…" : "Idle",
-               visible.some(i => demoLogs[i]?.text.includes("Confirmed")) ? "text-emerald-400" : "text-white/42"],
+                visible.some(i => demoLogs[i]?.text.includes("Confirmed")) ? "Confirmed" : visible.length > 0 ? "Relaying…" : "Idle",
+                visible.some(i => demoLogs[i]?.text.includes("Confirmed")) ? "text-emerald-400" : "text-white/42"],
               ["Slot", visible.some(i => demoLogs[i]?.text.includes("Confirmed")) ? "312,847,291" : "—", "text-white/42"],
             ].map(([label, val, cls]) => (
               <div key={label as string}>
@@ -743,7 +813,7 @@ function DemoTerminal() {
             </AnimatePresence>
             {running && visible.length < demoLogs.length && (
               <div className="flex gap-1 pl-4 pt-0.5">
-                {[0,1,2].map(i => (
+                {[0, 1, 2].map(i => (
                   <motion.div key={i} className="w-1 h-1 rounded-full bg-white/14"
                     animate={{ opacity: [0.14, 0.6, 0.14] }}
                     transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }}
@@ -772,22 +842,22 @@ function DemoTerminal() {
 export default function SendraPage() {
   const heroRef = useRef(null);
   const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY       = useTransform(heroScroll, [0, 1], [0, -55]);
+  const heroY = useTransform(heroScroll, [0, 1], [0, -55]);
   const heroOpacity = useTransform(heroScroll, [0, 0.65], [1, 0]);
 
   const pipeline = [
-    { label: "Simulate",  desc: "Pre-flight execution check" },
-    { label: "Optimize",  desc: "Dynamic fee computation" },
-    { label: "Route",     desc: "Fastest RPC selection" },
-    { label: "Send",      desc: "Submit with full context" },
-    { label: "Retry",     desc: "Automatic smart failover" },
+    { label: "Simulate", desc: "Pre-flight execution check" },
+    { label: "Optimize", desc: "Dynamic fee computation" },
+    { label: "Route", desc: "Fastest RPC selection" },
+    { label: "Send", desc: "Submit with full context" },
+    { label: "Retry", desc: "Automatic smart failover" },
   ];
 
   const features = [
-    { tag: "Core / 01", title: "Simulation Engine",  desc: "Every transaction is pre-flighted against live chain state. Reverts are caught before they cost you a fee." },
-    { tag: "Core / 02", title: "Fee Optimization",   desc: "Dynamic priority fees based on mempool density. Never overpay, never get dropped from the queue." },
-    { tag: "Core / 03", title: "Smart RPC Routing",  desc: "Continuous latency probing across a global RPC mesh. Your transaction always takes the fastest route." },
-    { tag: "Core / 04", title: "Retry Engine",       desc: "Exponential backoff with intelligent node switching. Stalled transactions get another shot, automatically." },
+    { tag: "Core / 01", title: "Simulation Engine", desc: "Every transaction is pre-flighted against live chain state. Reverts are caught before they cost you a fee." },
+    { tag: "Core / 02", title: "Fee Optimization", desc: "Dynamic priority fees based on mempool density. Never overpay, never get dropped from the queue." },
+    { tag: "Core / 03", title: "Smart RPC Routing", desc: "Continuous latency probing across a global RPC mesh. Your transaction always takes the fastest route." },
+    { tag: "Core / 04", title: "Retry Engine", desc: "Exponential backoff with intelligent node switching. Stalled transactions get another shot, automatically." },
   ];
 
   return (
@@ -803,22 +873,24 @@ export default function SendraPage() {
           borderBottom: "1px solid rgba(255,255,255,0.045)",
           background: "rgba(7,7,9,0.82)",
         }}>
-      <nav className="flex items-center justify-between px-8 py-4 max-w-7xl mx-auto">
-        <TiltLogo />
-        <div className="hidden md:flex items-center gap-8 text-[13px] text-white/32">
-          {[["#how","How it works"],["#features","Features"],["#demo","Demo"]].map(([href, label]) => (
-            <a key={href} href={href}
-              className="relative hover:text-white/72 transition-colors duration-200 group">
-              {label}
-              <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-white/28 group-hover:w-full transition-all duration-300" />
-            </a>
-          ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <GhostButton>Read docs</GhostButton>
-          <PrimaryButton>Get started</PrimaryButton>
-        </div>
-      </nav>
+        <nav className="flex items-center justify-between px-8 py-4 max-w-7xl mx-auto">
+          <div className="flex flex-1">
+            <TiltLogo />
+          </div>
+          <div className="hidden md:flex items-center justify-center gap-8 text-[13px] text-white/32">
+            {[["#how", "How it works"], ["#features", "Features"], ["#demo", "Demo"]].map(([href, label]) => (
+              <a key={href} href={href}
+                className="relative hover:text-white/72 transition-colors duration-200 group">
+                {label}
+                <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-white/28 group-hover:w-full transition-all duration-300" />
+              </a>
+            ))}
+          </div>
+          <div className="flex flex-1 items-center justify-end gap-2">
+            <GhostButton>Read docs</GhostButton>
+            <PrimaryButton>Get started</PrimaryButton>
+          </div>
+        </nav>
       </header>
 
       {/* ── Hero ── */}
@@ -877,13 +949,13 @@ export default function SendraPage() {
             <PrimaryButton>
               Try Demo
               <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                <path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </PrimaryButton>
             <GhostButton>
               Read the docs
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
-                <path d="M1.5 8.5l7-7M5 1.5h4v4" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M1.5 8.5l7-7M5 1.5h4v4" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </GhostButton>
           </motion.div>
@@ -895,7 +967,7 @@ export default function SendraPage() {
             transition={{ duration: 1, delay: 0.65 }}
             className="flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-20 mt-24"
           >
-            {[["99.97%","delivery rate"],["< 1.2s","avg confirmation"],["42%","lower fees"]].map(([val, label]) => (
+            {[["99.97%", "delivery rate"], ["< 1.2s", "avg confirmation"], ["42%", "lower fees"]].map(([val, label]) => (
               <div key={label} className="text-center">
                 <div className="text-[26px] font-light text-white/86 tabular-nums">{val}</div>
                 <div className="text-[9.5px] text-white/20 mt-1.5 uppercase tracking-[0.2em] font-mono">{label}</div>
@@ -947,7 +1019,7 @@ export default function SendraPage() {
                   <div className="hidden md:flex absolute top-[44%] -right-2 z-10 items-center">
                     <div className="w-2 h-px" style={{ background: "rgba(255,255,255,0.12)" }} />
                     <svg width="5" height="5" viewBox="0 0 5 5" fill="none" style={{ opacity: 0.2 }}>
-                      <path d="M0 2.5L4 0.5V4.5L0 2.5Z" fill="white"/>
+                      <path d="M0 2.5L4 0.5V4.5L0 2.5Z" fill="white" />
                     </svg>
                   </div>
                 )}
@@ -1012,7 +1084,7 @@ export default function SendraPage() {
               <PrimaryButton>
                 Start building
                 <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
-                  <path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 5.5h7M5.5 2l3.5 3.5L5.5 9" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </PrimaryButton>
               <GhostButton>View on GitHub</GhostButton>
@@ -1025,10 +1097,12 @@ export default function SendraPage() {
       <footer className="relative z-10">
         <Divider />
         <div className="max-w-7xl mx-auto px-8 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <TiltLogo />
-          <p className="text-[11px] text-white/16 font-mono tracking-wide">Built for Solana builders.</p>
-          <div className="flex gap-6 text-[11px] text-white/20">
-            {["Docs","GitHub","Twitter"].map(link => (
+          <div className="flex flex-1 justify-center md:justify-start">
+            <TiltLogo />
+          </div>
+          <p className="text-[11px] text-white/16 font-mono tracking-wide text-center">Built for Solana builders.</p>
+          <div className="flex flex-1 justify-center md:justify-end gap-6 text-[11px] text-white/20">
+            {["Docs", "GitHub", "Twitter"].map(link => (
               <a key={link} href="#"
                 className="relative hover:text-white/52 transition-colors duration-200 group">
                 {link}
