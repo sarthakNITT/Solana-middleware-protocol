@@ -13,7 +13,8 @@ export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
         typeof serialisedTransaction === "string"
             ? Buffer.from(serialisedTransaction, "base64")
             : serialisedTransaction;
-    const simulate_result = await simulateTx(txBytes);
+    const bestRPC = await selectRpc();
+    const simulate_result = await simulateTx(txBytes, bestRPC);
     console.log(`Simulate Result: ${simulate_result.success}`);
     if (!simulate_result.success) {
         return {
@@ -25,11 +26,10 @@ export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
     }
 
     const currentTx = simulate_result.transaction;
-    const optimized = await optimizeFee(currentTx);
+    const optimized = await optimizeFee(currentTx, bestRPC);
     let optimizedTx = optimized.transaction;
     let fee = optimized.fee;
-    const RPC_URL = await selectRpc();
-    let signature = await sendTx(optimizedTx, RPC_URL);
+    let signature = await sendTx(optimizedTx, bestRPC);
     let attempts = 1;
     const maxRetries = req.options?.maxRetries ?? 3;
 
@@ -39,7 +39,7 @@ export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
             console.log(`signature: ${signature}`);
             console.log(`attempts: ${attempts}`);
             console.log(`maxRetries: ${maxRetries}`);
-            const status = await getTxStatus(signature, RPC_URL);
+            const status = await getTxStatus(signature, bestRPC);
             if (status === "confirmed") {
                 clearInterval(interval);
                 resolve({

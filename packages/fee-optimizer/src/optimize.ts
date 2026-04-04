@@ -1,8 +1,8 @@
-import type { DeserializedTx, OptimizedTx } from "@repo/types/index";
+import type { DeserializedTx, OptimizedTx, RpcEndpoint } from "@repo/types/index";
 import { Connection } from "@solana/web3.js";
 import { applyPriorityFee } from "@repo/tx-builder/applyFee";
 
-export async function optimizeFee(tx: DeserializedTx, prevFee?: number): Promise<OptimizedTx> {
+export async function optimizeFee(tx: DeserializedTx, RPC_URL: RpcEndpoint, prevFee?: number): Promise<OptimizedTx> {
     let newFee: number;
     if (prevFee !== undefined) {
         newFee = Math.floor(prevFee * 1.2);
@@ -12,7 +12,7 @@ export async function optimizeFee(tx: DeserializedTx, prevFee?: number): Promise
             fee: newFee
         }
     } else {
-        const connection = new Connection("https://api.devnet.solana.com", "confirmed");
+        const connection = new Connection(`${RPC_URL.url}`, "confirmed");
         const getFee = await connection.getRecentPrioritizationFees();
         const fees = getFee
             .map((e) => e.prioritizationFee)
