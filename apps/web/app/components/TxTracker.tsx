@@ -24,7 +24,7 @@ async function fetchTxStatus(signature: string): Promise<TxStatus> {
       { signature, status: "confirmed", confirmations: 3, slot: 312847300, err: null },
       { signature, status: "failed", confirmations: null, slot: 312847410, err: "InstructionError: Custom(6001)" },
     ];
-    return mocked[Math.floor(Math.random() * mocked.length)];
+    return mocked[Math.floor(Math.random() * mocked.length)] as TxStatus;
   }
 }
 

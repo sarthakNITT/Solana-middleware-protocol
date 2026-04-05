@@ -148,10 +148,10 @@ export function ArchitectureDiagram() {
                   The node box is ~46px tall (2.5 + text + 0.5 padding).
                   We use a fixed height of 46px.
                 */
-                style={{ width: "28px", height: "46px" }}
+                style={{ width: "28px", height: "46px", transformOrigin: "left" }}
                 initial={{ scaleX: 0, opacity: 0 }}
                 animate={inView ? { scaleX: 1, opacity: 1 } : {}}
-                transition={{ delay: i * 0.08 + 0.18, duration: 0.28, originX: 0 }}
+                transition={{ delay: i * 0.08 + 0.18, duration: 0.28 }}
               >
                 <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.14)" }} />
                 <svg width="5" height="6" viewBox="0 0 5 6" fill="none" style={{ flexShrink: 0 }}>
