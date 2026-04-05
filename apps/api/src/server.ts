@@ -1,17 +1,36 @@
-import { HandleTx } from "./orchestrator";
+import { serve } from "bun";
 
-Bun.serve({
-    port: 3002,
-    fetch: async (req) => {
-        if (req.method === "POST" && new URL(req.url).pathname === "/tx") {
-            const body = await req.json();
-            console.log(`Got body from request: ${body}`);
-            const result = await HandleTx(body);
-            return Response.json(result);
+serve({
+    port: 3000,
+    fetch(req) {
+        const url = new URL(req.url);
+
+        if (url.pathname === "/health") {
+            return new Response(
+                JSON.stringify({
+                    status: "ok",
+                    service: "sendra-api",
+                    timestamp: Date.now(),
+                }),
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
+        }
+
+        if (url.pathname === "/debug") {
+            return new Response(
+                JSON.stringify({
+                    message: "Sendra API is running",
+                }),
+                {
+                    headers: { "Content-Type": "application/json" },
+                }
+            );
         }
 
         return new Response("Not Found", { status: 404 });
     },
 });
 
-console.log(`Server running at port: 3002`);
+console.log("Sendra API running on http://localhost:3000");
