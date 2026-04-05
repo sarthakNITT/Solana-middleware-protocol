@@ -29,7 +29,7 @@ import nacl from "tweetnacl";
     const instruction = SystemProgram.transfer({
         fromPubkey: sender.publicKey,
         toPubkey: receiver,
-        lamports: 1000000000000000,
+        lamports: 1000,
     });
 
     const message = new TransactionMessage({

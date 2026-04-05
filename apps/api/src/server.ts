@@ -1,7 +1,7 @@
 import { HandleTx } from "./orchestrator";
 
 Bun.serve({
-    port: 3000,
+    port: 3002,
     fetch: async (req) => {
         if (req.method === "POST" && new URL(req.url).pathname === "/tx") {
             const body = await req.json();
@@ -14,4 +14,4 @@ Bun.serve({
     },
 });
 
-console.log(`Server running at port: 3000`);
+console.log(`Server running at port: 3002`);

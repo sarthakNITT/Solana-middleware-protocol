@@ -14,6 +14,7 @@ export const HandleTx = async (req: TxRequest): Promise<TxResponse> => {
             ? Buffer.from(serialisedTransaction, "base64")
             : serialisedTransaction;
     const bestRPC = await selectRpc();
+    console.log(`RPC: ${bestRPC.url}`);
     const simulate_result = await simulateTx(txBytes, bestRPC);
     console.log(`Simulate Result: ${simulate_result.success}`);
     if (!simulate_result.success) {
