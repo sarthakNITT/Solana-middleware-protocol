@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
-// ─── Copy Icon ────────────────────────────────────────────────────────────────
 const CopyIcon = () => (
   <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
     <rect x="4" y="4" width="8" height="8" rx="1.5" stroke="currentColor" strokeWidth="1.1" />
@@ -19,8 +18,7 @@ const CheckIcon = () => (
   </svg>
 );
 
-// ─── Snippet Data ─────────────────────────────────────────────────────────────
-type TabKey = "curl" | "typescript" | "python" | "rust";
+type TabKey = "Go" | "typescript" | "python" | "rust";
 
 interface Tab {
   key: TabKey;
@@ -36,90 +34,121 @@ const TABS: Tab[] = [
     label: "Rust",
     lang: "rust",
     dot: "#dea584",
-    code: ` use reqwest::Client;
- use serde_json::json;
+    code: `use sendra_sdk::{SendWithReliability, SendraParams, SendraOptions, Signer as SendraSigner};
+use solana_sdk::{signature::{Keypair, Signer}, pubkey::Pubkey};
+use solana_transaction::versioned::VersionedTransaction;
 
- #[tokio::main]
- async fn send_tx() -> Result<(), reqwest::Error> {
-     let client = Client::new();
-
-     let body = json!({
-         "transaction": "BASE64_SERIALIZED_TX",
-         "options": {
-             "maxRetries": 3
-         }
-     });
-
-     let res = client
-         .post("https://api.sendra.dev/tx")
-         .header("Content-Type", "application/json")
-         .json(&body)
-         .send()
-         .await?;
-
-     let data: serde_json::Value = res.json().await?;
-     println!("Tx Status: {:?}", data);
-
-     Ok(())
- }`,
+#[tokio::main]
+async fn main() {
+    let keypair = Keypair::new();
+    let params = SendraParams {
+        from: keypair.pubkey(),
+        to: "DrxQyFuqPdnyetjQuZhWiVyQiNhdnbPybPynpdkn1mQa"
+            .parse::<Pubkey>()
+            .unwrap(),
+        amount: 1000,
+    };
+    let signer = SendraSigner {
+        public_key: keypair.pubkey(),
+        sign_transaction: move |mut tx: VersionedTransaction| -> VersionedTransaction {
+            tx.sign(&[&keypair]);
+            tx
+        },
+    };
+    let options = SendraOptions {
+        max_retries: 3,
+    };
+    SendWithReliability(params, signer, options).await;
+};`,
   },
   {
     key: "typescript",
     label: "TypeScript",
     lang: "typescript",
     dot: "#3178c6",
-    code: ` const sendTx = async () => {
-   const res = await fetch("https://api.sendra.dev/tx", {
-     method: "POST",
-     headers: {
-       "Content-Type": "application/json"
-     },
-     body: JSON.stringify({
-       transaction: serializedTx,
-       options: {
-         maxRetries: 3
-       }
-     })
-   });
+    code: `import { SendWithReliability } from "@sendra/sdk";
+import { Keypair } from "@solana/web3.js";
 
-   const data = await res.json();
-   console.log("Tx Status:", data);
- };`,
+const signer = Keypair.generate();
+
+await SendWithReliability(
+  {
+    from: signer.publicKey,
+    to: "DrxQyFuqPdnyetjQuZhWiVyQiNhdnbPybPynpdkn1mQa",
+    amount: 1000,
+  },
+  {
+    publicKey: signer.publicKey,
+    signTransaction: async (tx) => {
+      tx.sign([signer]);
+      return tx;
+    },
+  },
+  { maxRetries: 3 }
+);`,
   },
   {
     key: "python",
     label: "Python",
     lang: "python",
     dot: "#3572A5",
-    code: ` import requests
+    code: `from sendra_sdk import SendWithReliability, SendraParams, SendraOptions, Signer
+from solders.keypair import Keypair
+from solders.pubkey import Pubkey
+from solders.transaction import VersionedTransaction
 
- url = "https://api.sendra.dev/tx"
+keypair = Keypair()
 
- payload = {
-     "transaction": "BASE64_SERIALIZED_TX",
-     "options": {
-         "maxRetries": 3
-     }
- }
-
- res = requests.post(url, json=payload)
- print(res.json())`,
+params = SendraParams(
+    from_=keypair.pubkey(),
+    to=Pubkey.from_string("DrxQyFuqPdnyetjQuZhWiVyQiNhdnbPybPynpdkn1mQa"),
+    amount=1000
+)
+def sign_transaction(tx: VersionedTransaction) -> VersionedTransaction:
+    tx = VersionedTransaction(tx.message, [keypair])
+    return tx
+signer = Signer(
+    public_key=keypair.pubkey(),
+    sign_transaction=sign_transaction
+)
+options = SendraOptions(max_retries=3)
+SendWithReliability(params, signer, options)`,
   },
   {
-    key: "curl",
-    label: "cURL",
-    lang: "bash",
+    key: "Go",
+    label: "Go",
+    lang: "go",
     dot: "#89e051",
-    code: ` curl -X POST https://api.sendra.dev/tx \\
-   -H "Content-Type: application/json" \\
-   -d '{
-     "transaction": "BASE64_SERIALIZED_TX",
-     "options": { "maxRetries": 3 }
-   }'`,
+    code: `package main
+import (
+	sendra "github.com/sendra/sdk"
+	"github.com/gagliardetto/solana-go"
+)
+
+func main() {
+	keypair := solana.NewWallet()
+	params := sendra.SendraParams{
+		From:   keypair.PublicKey(),
+		To:     solana.MustPublicKeyFromBase58("DrxQyFuqPdnyetjQuZhWiVyQiNhdnbPybPynpdkn1mQa"),
+		Amount: 1000,
+	}
+	signer := sendra.Signer{
+		PublicKey: keypair.PublicKey(),
+		SignTransaction: func(tx *solana.VersionedTransaction) *solana.VersionedTransaction {
+        _ = tx.Sign(func(solana.PublicKey) *solana.PrivateKey {
+          return &keypair.PrivateKey
+        })
+        return tx
+    },
+	}
+	options := sendra.SendraOptions{
+		MaxRetries: 3,
+	}
+	sendra.SendWithReliability(params, signer, options)
+}`,
   },
 ];
 
-// ─── Custom syntax highlighting theme (matches dark UI) ───────────────────────
 const customTheme = {
   ...atomOneDark,
   hljs: {
@@ -132,7 +161,6 @@ const customTheme = {
   },
 };
 
-// ─── CodeSnippetTabs ──────────────────────────────────────────────────────────
 export function CodeSnippetTabs() {
   const [active, setActive] = useState<TabKey>("rust");
   const [copied, setCopied] = useState(false);
@@ -148,7 +176,6 @@ export function CodeSnippetTabs() {
 
   return (
     <div className="relative w-full">
-      {/* Ambient glow */}
       <div
         className="absolute inset-0 rounded-2xl -z-10 pointer-events-none"
         style={{ boxShadow: "0 0 80px rgba(99,102,241,0.13), 0 32px 64px rgba(0,0,0,0.5)" }}
@@ -161,7 +188,6 @@ export function CodeSnippetTabs() {
           border: "1px solid rgba(255,255,255,0.07)",
         }}
       >
-        {/* ── Window chrome ── */}
         <div
           className="flex items-center justify-between px-4 py-3 border-b border-white/[0.05]"
           style={{ background: "rgba(255,255,255,0.018)" }}
@@ -174,7 +200,6 @@ export function CodeSnippetTabs() {
           <span className="font-mono text-[9.5px] text-white/20 tracking-widest uppercase">
             Sendra API
           </span>
-          {/* Copy button */}
           <motion.button
             onClick={handleCopy}
             whileTap={{ scale: 0.93 }}
@@ -215,7 +240,6 @@ export function CodeSnippetTabs() {
           </motion.button>
         </div>
 
-        {/* ── Language tabs ── */}
         <div
           className="flex items-center gap-0 px-3 pt-2 border-b border-white/[0.04]"
           style={{ background: "rgba(0,0,0,0.15)" }}
@@ -230,7 +254,6 @@ export function CodeSnippetTabs() {
                 style={{ color: isActive ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.28)" }}
               >
                 <span className="flex items-center gap-1.5">
-                  {/* Language dot */}
                   <span
                     className="w-1.5 h-1.5 rounded-full flex-shrink-0 transition-opacity duration-200"
                     style={{
@@ -240,7 +263,6 @@ export function CodeSnippetTabs() {
                   />
                   {tab.label}
                 </span>
-                {/* Active underline */}
                 {isActive && (
                   <motion.div
                     layoutId="tab-indicator"
@@ -257,17 +279,13 @@ export function CodeSnippetTabs() {
 
         </div>
 
-        {/* ── Code block & Comments ── */}
         <div className="flex flex-col md:flex-row relative">
-          {/* Top glow edge */}
           <div
             className="absolute top-0 left-0 right-0 h-px z-10"
             style={{ background: "linear-gradient(90deg, transparent, rgba(99,102,241,0.15), transparent)" }}
           />
 
-          {/* Left: Code Editor */}
-          <div className="relative overflow-hidden w-full md:w-[50%] border-r border-white/[0.04]">
-            {/* Line number gutter */}
+          <div className="relative overflow-hidden w-full md:w-[60%] border-r border-white/[0.04]">
             <div
               className="absolute top-0 bottom-0 left-0 w-10"
               style={{ background: "rgba(0,0,0,0.18)", borderRight: "1px solid rgba(255,255,255,0.03)" }}
@@ -286,6 +304,7 @@ export function CodeSnippetTabs() {
                   language={activeTab.lang}
                   style={customTheme}
                   showLineNumbers
+                  className="[&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                   lineNumberStyle={{
                     display: "inline-block",
                     color: "rgba(255,255,255,0.18)",
@@ -314,8 +333,7 @@ export function CodeSnippetTabs() {
             </AnimatePresence>
           </div>
 
-          {/* Right: Comments */}
-          <div className="w-full md:w-[50%] p-8 bg-transparent border-l border-white/[0.02] text-[#6b7280] font-mono text-[12px] leading-relaxed h-[600px] overflow-hidden">
+          <div className="w-full md:w-[40%] p-8 bg-transparent border-l border-white/[0.02] text-[#6b7280] font-mono text-[12px] leading-relaxed h-[600px] overflow-hidden">
             <div className="mb-6">
               <span className="text-[#a5b4fc]"># Sendra</span>
               <br />
@@ -340,7 +358,6 @@ export function CodeSnippetTabs() {
           </div>
         </div>
 
-        {/* ── Footer ── */}
         <div
           className="flex items-center gap-2 px-4 py-2.5 border-t border-white/[0.04]"
           style={{ background: "rgba(0,0,0,0.25)" }}

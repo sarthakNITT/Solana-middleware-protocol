@@ -92,7 +92,7 @@ function DecoderText({ text, isHovered }: { text: string; isHovered: boolean }) 
 
     let iteration = 0;
     // Lower divisor or minimum value here reduces the left-to-right reading speed
-    const charsPerTick = Math.max(text.length / 30, 0.2);
+    const charsPerTick = Math.max(text.length / 20, 0.2);
     let interval: ReturnType<typeof setInterval>;
 
     const tick = () => {
