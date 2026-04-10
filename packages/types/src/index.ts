@@ -67,11 +67,29 @@ export type SendraResult = {
     error?: SendraError;
     logs?: SendraLog[];
 };
+export type SendraLogEvent = 
+  | "INIT"
+  | "RPC_SELECTED"
+  | "TX_BUILT"
+  | "FEE_OPTIMIZED"
+  | "SIMULATION_SUCCESS"
+  | "SIMULATION_FAILED"
+  | "TX_SIGNED"
+  | "TX_SENT"
+  | "STATUS_CHECK"
+  | "RETRY_TRIGGERED"
+  | "TX_CONFIRMED"
+  | "TX_FAILED";
+
 export type SendraLog = {
-    step: string
-    message: string
-    rpc?: string
-    attempt?: number
-    fee?: number
-    reason?: "timeout" | "rpc_error" | "failed" | string
+    event: SendraLogEvent;
+    timestamp: number;
+    requestId?: string;
+    attempt?: number;
+    rpc?: string;
+    fee?: number;
+    signature?: string;
+    reason?: any;
+    params?: any;
+    attempts?: number;
 }

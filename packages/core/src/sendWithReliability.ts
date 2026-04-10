@@ -1,71 +1,82 @@
-import { SendraError, SendraLog, SendraOptions, SendraParams, SendraResult, Signer } from "@repo/types/index";
+import { SendraError, SendraLog, SendraLogEvent, SendraOptions, SendraParams, SendraResult, Signer } from "@repo/types/index";
 import { selectRpc } from "@repo/router/router"
 import { SimulateTx } from "@repo/simulator/simulate";
 import { SendTx } from "@repo/rpc-client/send"
 import { BuildTx } from "@repo/tx-builder/builder";
 import { OptimizeFee } from "@repo/fee-optimizer/optimize";
 import { ConfirmTx } from "@repo/logger/confirmTx";
+import { log } from "@repo/logger/logger";
 
 export async function SendWithReliability(params: SendraParams, signer: Signer, options: SendraOptions): Promise<SendraResult> {
+    const requestId = Math.random().toString(36).substring(2, 10);
     const logs: SendraLog[] = [];
-    const log = (entry: Partial<SendraLog> & { step: string }) => {
-        logs.push({
-            step: entry.step,
-            message: entry.message || entry.step,
-            rpc: entry.rpc,
-            attempt: entry.attempt,
-            fee: entry.fee,
-            reason: entry.reason
+    
+    let attempt = 1;
+    let currentRpc = "";
+    let currentFee = 0;
+    let currentSignature = "";
+    
+    const track = (event: SendraLogEvent, data: any = {}) => {
+        const entry = log(event, {
+            requestId,
+            attempt,
+            rpc: currentRpc,
+            fee: currentFee,
+            signature: currentSignature,
+            ...data
         });
+        logs.push(entry);
     };
 
-    let attempt = 1;
+    track("INIT", { params });
+
     let rpc = await selectRpc();
-    let currentRpcUrl = rpc.url;
-
-    log({ step: "SELECTED_RPC", rpc: currentRpcUrl });
+    currentRpc = rpc.url;
+    track("RPC_SELECTED");
+    
     let tx = await BuildTx(rpc, signer, params);
-    log({ step: "BUILD_TX" });
-
+    track("TX_BUILT");
+    
     let optimisedTx = await OptimizeFee(tx, rpc);
-    let lastFee = optimisedTx.fee;
-    log({ step: "OPTIMIZE_FEE", fee: lastFee });
-
+    currentFee = optimisedTx.fee;
+    track("FEE_OPTIMIZED", { fee: currentFee });
+    
     let simResult = await SimulateTx(optimisedTx.transaction, rpc, signer);
-    log({ step: "SIMULATE_TX", message: `Simulated: ${simResult.success ? "Success" : "Failed"}` });
-
     if (!simResult.success) {
+        track("SIMULATION_FAILED", { reason: simResult.error });
         return { status: "failed", attempts: attempt, error: simResult.error, logs };
     }
-
+    track("SIMULATION_SUCCESS");
+    
     let signedTx;
     try {
         signedTx = await signer.signTransaction(simResult.transaction);
-        log({ step: "SIGN_TX" });
+        track("TX_SIGNED");
     } catch (e: any) {
         const error: SendraError = { type: "UNKNOWN", message: e.message || String(e) };
         return { status: "failed", attempts: attempt, error, logs };
     }
-
+    
     let sendResult = await SendTx(signedTx, rpc);
-    log({ step: "SEND", rpc: currentRpcUrl, attempt });
+    if (sendResult.success) {
+        currentSignature = sendResult.signature!;
+    }
+    track("TX_SENT");
 
     let confirmResult;
     let retryReason = "";
-
+    
     if (!sendResult.success) {
         retryReason = sendResult.error?.type === "RPC_ERROR" ? "rpc_error" : "failed";
     } else {
-        const start = Date.now();
-        confirmResult = await ConfirmTx(rpc, sendResult.signature!);
-        const timeElapsed = Date.now() - start;
-
-        log({ step: "CONFIRM_TX", message: `Confirm took ${timeElapsed}ms: ${confirmResult.success ? "Success" : "Failed"}`, rpc: currentRpcUrl, attempt });
-
+        track("STATUS_CHECK");
+        confirmResult = await ConfirmTx(rpc, currentSignature);
+        
         if (confirmResult.success) {
-            return { status: "confirmed", signature: confirmResult.signature, attempts: attempt, logs };
+            track("TX_CONFIRMED", { attempts: attempt });
+            return { status: "confirmed", signature: currentSignature, attempts: attempt, logs };
         }
-
+        
         if (confirmResult.error?.type === "TIMEOUT") retryReason = "timeout";
         else if (confirmResult.error?.type === "RPC_ERROR") retryReason = "rpc_error";
         else retryReason = "failed";
@@ -73,60 +84,56 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
 
     while (attempt < options.maxRetries) {
         attempt++;
-
-        log({
-            step: "RETRY",
-            message: `[RETRY] attempt=${attempt} rpc=${currentRpcUrl} fee=${lastFee} reason=${retryReason}`,
-            attempt: attempt,
-            rpc: currentRpcUrl,
-            fee: lastFee,
-            reason: retryReason
-        });
-
+        
+        track("RETRY_TRIGGERED", { reason: retryReason });
+        
         rpc = await selectRpc();
-        currentRpcUrl = rpc.url;
-        log({ step: "SELECTED_RPC", rpc: currentRpcUrl });
-
+        currentRpc = rpc.url;
+        track("RPC_SELECTED");
+        
         const newTx = await BuildTx(rpc, signer, params);
-        log({ step: "BUILD_TX" });
-
-        optimisedTx = await OptimizeFee(newTx, rpc, lastFee);
-        lastFee = optimisedTx.fee;
-        log({ step: "OPTIMIZE_FEE", fee: lastFee });
-
+        track("TX_BUILT");
+        
+        optimisedTx = await OptimizeFee(newTx, rpc, currentFee);
+        currentFee = optimisedTx.fee;
+        track("FEE_OPTIMIZED", { fee: currentFee });
+        
         simResult = await SimulateTx(optimisedTx.transaction, rpc, signer);
-        log({ step: "SIMULATE_TX", message: `Simulated: ${simResult.success ? "Success" : "Failed"}` });
-
         if (!simResult.success) {
+            track("SIMULATION_FAILED", { reason: simResult.error });
+            track("TX_FAILED", { attempts: attempt });
             return { status: "failed", attempts: attempt, error: simResult.error, logs };
         }
-
+        track("SIMULATION_SUCCESS");
+        
         try {
             signedTx = await signer.signTransaction(simResult.transaction);
-            log({ step: "SIGN_TX" });
+            track("TX_SIGNED");
         } catch (e: any) {
             const error: SendraError = { type: "UNKNOWN", message: e.message || String(e) };
+            track("TX_FAILED", { attempts: attempt });
             return { status: "failed", attempts: attempt, error, logs };
         }
-
+        
         sendResult = await SendTx(signedTx, rpc);
-        log({ step: "SEND", rpc: currentRpcUrl, attempt });
-
+        if (sendResult.success) {
+            currentSignature = sendResult.signature!;
+        }
+        track("TX_SENT");
+        
         if (!sendResult.success) {
             retryReason = sendResult.error?.type === "RPC_ERROR" ? "rpc_error" : "failed";
             continue;
         }
-
-        const start = Date.now();
-        confirmResult = await ConfirmTx(rpc, sendResult.signature!);
-        const timeElapsed = Date.now() - start;
-
-        log({ step: "CONFIRM_TX", message: `Confirm took ${timeElapsed}ms: ${confirmResult.success ? "Success" : "Failed"}`, rpc: currentRpcUrl, attempt });
-
+        
+        track("STATUS_CHECK");
+        confirmResult = await ConfirmTx(rpc, currentSignature);
+        
         if (confirmResult.success) {
-            return { status: "confirmed", signature: confirmResult.signature, attempts: attempt, logs };
+            track("TX_CONFIRMED", { attempts: attempt });
+            return { status: "confirmed", signature: currentSignature, attempts: attempt, logs };
         }
-
+        
         if (confirmResult.error?.type === "TIMEOUT") retryReason = "timeout";
         else if (confirmResult.error?.type === "RPC_ERROR") retryReason = "rpc_error";
         else retryReason = "failed";
@@ -136,6 +143,8 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
         type: "TIMEOUT",
         message: "Max retries exceeded"
     };
+
+    track("TX_FAILED", { attempts: attempt });
 
     return {
         status: "failed",
