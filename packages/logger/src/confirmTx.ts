@@ -5,22 +5,26 @@ function sleep(ms: number) {
 }
 
 export async function ConfirmTx(rpc: RpcEndpoint, signature: Signature, intervalMs: number = 1000, timeoutMs: number = 60000) {
-    const start = Date.now();
+    try {
+        const start = Date.now();
 
-    while (true) {
-        const status = await getTxStatus(signature, rpc);
-        if (status === "confirmed") {
-            return { success: true, signature };
+        while (true) {
+            const status = await getTxStatus(signature, rpc);
+            if (status === "confirmed") {
+                return { success: true, signature };
+            }
+
+            if (status === "failed") {
+                return { success: false, signature };
+            }
+
+            if (Date.now() - start > timeoutMs) {
+                return { success: false, signature, error: "timeout" };
+            }
+
+            await sleep(intervalMs);
         }
-
-        if (status === "failed") {
-            return { success: false, signature };
-        }
-
-        if (Date.now() - start > timeoutMs) {
-            return { success: false, signature, error: "timeout" };
-        }
-
-        await sleep(intervalMs);
+    } catch (error) {
+        throw new Error(`Error ConfirmTx: ${error}`)
     }
 }

@@ -3,7 +3,7 @@ import { selectRpc } from "@repo/router/router"
 import { SimulateTx } from "@repo/simulator/simulate";
 import { SendTx } from "@repo/rpc-client/send"
 import { BuildTx } from "@repo/tx-builder/builder";
-import { optimizeFee } from "@repo/fee-optimizer/optimize";
+import { OptimizeFee } from "@repo/fee-optimizer/optimize";
 import { ConfirmTx } from "@repo/logger/confirmTx";
 
 export async function SendWithReliability(params: SendraParams, signer: Signer, options: SendraOptions) {
@@ -19,7 +19,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
         step: "BUILD_TX",
         message: "Built Transaction",
     })
-    const optimisedTx = await optimizeFee(tx, rpc);
+    const optimisedTx = await OptimizeFee(tx, rpc);
     logs.push({
         step: "OPTIMIZE_FEE",
         message: `Optimized Fee: ${optimisedTx.fee} lamports`,
@@ -32,7 +32,12 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
     if (!simulateResult.success) {
         return { success: false, error: simulateResult.error, attempts: 1 };
     }
-    const signedTx = await signer.signTransaction(simulateResult.transaction);
+    let signedTx;
+    try {
+        signedTx = await signer.signTransaction(simulateResult.transaction);
+    } catch (error) {
+        return { success: false, error: `Error from SignTx: ${error}`, attempts: 1 };
+    }
     logs.push({
         step: "SIGN_TX",
         message: "Signed Transaction",
@@ -72,7 +77,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
             step: "BUILD_TX",
             message: "Built Transaction",
         })
-        const reOptimized = await optimizeFee(newTx, currentRpc, lastFee);
+        const reOptimized = await OptimizeFee(newTx, currentRpc, lastFee);
         logs.push({
             step: "OPTIMIZE_FEE",
             message: `Optimized Fee: ${reOptimized.fee} lamports`,
@@ -88,7 +93,12 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
             return { success: false, error: sim.error, attempts: attempt + 1 };
         }
 
-        const signedTx = await signer.signTransaction(sim.transaction);
+        let signedTx
+        try {
+            signedTx = await signer.signTransaction(sim.transaction);
+        } catch (error) {
+            return { success: false, error: `Error from SignTx: ${error}`, attempts: attempt + 1 };
+        }
         logs.push({
             step: "SIGN_TX",
             message: "Signed Transaction",
