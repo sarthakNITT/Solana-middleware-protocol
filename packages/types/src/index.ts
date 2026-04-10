@@ -1,5 +1,11 @@
 import { PublicKey, Transaction, VersionedTransaction } from "@solana/web3.js"
 
+export type SendraError = {
+  type: "SIMULATION_FAIL" | "RPC_ERROR" | "TIMEOUT" | "UNKNOWN"
+  message: string
+  details?: any
+}
+
 export type SerializedTx = Uint8Array
 export type TxRequest = {
     transaction: SerializedTx
@@ -14,11 +20,11 @@ export type TxResponse = {
     signature?: string
     attempts: number
     logs: string[]
-    error?: string
+    error?: SendraError
 }
 export type SimulationResult = {
     success: boolean
-    error?: string
+    error?: SendraError
     logs: string[]
     transaction: DeserializedTx
 }
@@ -28,7 +34,7 @@ export type RpcEndpoint = {
     successRate?: boolean
 }
 export type Signature = string
-export type TxStatus = "pending" | "confirmed" | "failed"
+export type TxStatus = "pending" | "confirmed" | "failed" | "timeout"
 export type context = {
     attempts: number
     maxRetries: number
@@ -55,14 +61,17 @@ export type SendraOptions = {
 };
 
 export type SendraResult = {
-    signature: string;
+    signature?: string;
     status: "confirmed" | "failed";
     attempts: number;
-    error?: string;
+    error?: SendraError;
+    logs?: SendraLog[];
 };
 export type SendraLog = {
     step: string
     message: string
     rpc?: string
     attempt?: number
+    fee?: number
+    reason?: "timeout" | "rpc_error" | "failed" | string
 }

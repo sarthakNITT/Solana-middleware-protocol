@@ -1,5 +1,6 @@
-import { RpcEndpoint, Signature } from "@repo/types/index";
+import { RpcEndpoint, Signature, SendraError } from "@repo/types/index";
 import { getTxStatus } from "@repo/rpc-client/status"
+
 function sleep(ms: number) {
     return new Promise((res) => setTimeout(res, ms));
 }
@@ -15,16 +16,19 @@ export async function ConfirmTx(rpc: RpcEndpoint, signature: Signature, interval
             }
 
             if (status === "failed") {
-                return { success: false, signature };
+                const error: SendraError = { type: "UNKNOWN", message: "Transaction failed" };
+                return { success: false, signature, error };
             }
 
             if (Date.now() - start > timeoutMs) {
-                return { success: false, signature, error: "timeout" };
+                const error: SendraError = { type: "TIMEOUT", message: "Transaction confirmation timeout" };
+                return { success: false, signature, error };
             }
 
             await sleep(intervalMs);
         }
-    } catch (error) {
-        throw new Error(`Error ConfirmTx: ${error}`)
+    } catch (e: any) {
+        const error: SendraError = { type: "RPC_ERROR", message: e.message || String(e) };
+        return { success: false, signature, error };
     }
 }

@@ -1,4 +1,4 @@
-import type { SimulationResult, SerializedTx, RpcEndpoint, DeserializedTx, Signer } from "@repo/types/index"
+import type { SimulationResult, SerializedTx, RpcEndpoint, DeserializedTx, Signer, SendraError } from "@repo/types/index"
 import {
     Connection,
     VersionedTransaction,
@@ -6,18 +6,41 @@ import {
 
 export async function SimulateTx(tx: DeserializedTx, RPC_URL: RpcEndpoint, signer: Signer): Promise<SimulationResult> {
     try {
-        console.log(`Called simulateTx`);
         const connection = new Connection(`${RPC_URL.url}`, "confirmed");
         const serializedTx = tx.serialize();
         const deserializedTx = VersionedTransaction.deserialize(serializedTx);
         const res = await connection.simulateTransaction(deserializedTx);
+        
+        if (res.value?.err) {
+            const error: SendraError = {
+                type: "SIMULATION_FAIL",
+                message: typeof res.value.err === "string" ? res.value.err : "Transaction simulation failed",
+                details: res.value.logs
+            };
+            return {
+                success: false,
+                error,
+                logs: res.value.logs || [],
+                transaction: deserializedTx
+            };
+        }
+        
         return {
-            success: !res.value?.err,
-            error: res.value?.err ? JSON.stringify(res.value.err) : "none",
+            success: true,
             logs: res.value?.logs || [],
             transaction: deserializedTx
         }
-    } catch (error) {
-        throw new Error(`Error from SimulateTx: ${error}`)
+    } catch (e) {
+        const error: SendraError = {
+            type: "UNKNOWN",
+            message: e instanceof Error ? e.message : String(e),
+            details: e
+        };
+        return {
+            success: false,
+            error,
+            logs: [],
+            transaction: tx
+        }
     }
 }

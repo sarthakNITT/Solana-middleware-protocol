@@ -5,26 +5,27 @@ import {
 import { SOLANA_DEVNET_RPC_URL } from "@repo/config/index";
 
 export async function getTxStatus(signature: Signature, RPC_URL: RpcEndpoint): Promise<TxStatus> {
-    console.log("called getTxStatus");
-    const connection = new Connection(`${RPC_URL.url}`, "confirmed");
-    const response = await connection.getSignatureStatus(signature);
-    const err = response.value?.err;
-    if (err) {
-        console.log("Error while getting signatures from RPC");
-        return "failed";
-    }
-    const status = response.value?.confirmationStatus;
-    console.log(`Status: ${status}`);
-    if (status === "processed") {
-        return "pending";
-    }
-    else if (status === "confirmed" || status === "finalized") {
-        return "confirmed";
-    }
-    else if (!status) {
-        return "pending";
-    }
-    else {
+    try {
+        const connection = new Connection(`${RPC_URL.url}`, "confirmed");
+        const response = await connection.getSignatureStatus(signature);
+        const err = response.value?.err;
+        if (err) {
+            return "failed";
+        }
+        const status = response.value?.confirmationStatus;
+        if (status === "processed") {
+            return "pending";
+        }
+        else if (status === "confirmed" || status === "finalized") {
+            return "confirmed";
+        }
+        else if (!status) {
+            return "pending";
+        }
+        else {
+            return "failed";
+        }
+    } catch (e) {
         return "failed";
     }
 }
