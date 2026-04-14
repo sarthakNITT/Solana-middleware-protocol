@@ -1,4 +1,4 @@
-import type { DeserializedTx } from "@repo/types/index";
+import type { DeserializedTx } from "@repo/types";
 import {
     ComputeBudgetProgram,
     TransactionMessage,

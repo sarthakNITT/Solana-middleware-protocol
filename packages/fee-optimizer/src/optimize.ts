@@ -1,6 +1,6 @@
-import type { DeserializedTx, OptimizedTx, RpcEndpoint } from "@repo/types/index";
+import type { DeserializedTx, OptimizedTx, RpcEndpoint } from "@repo/types";
 import { Connection } from "@solana/web3.js";
-import { applyPriorityFee } from "@repo/tx-builder/applyFee";
+import { applyPriorityFee } from "@repo/tx-builder";
 
 export async function optimizeFee(tx: DeserializedTx, RPC_URL: RpcEndpoint, prevFee?: number): Promise<OptimizedTx> {
     try {

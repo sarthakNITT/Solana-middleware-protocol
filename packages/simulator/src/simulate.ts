@@ -1,4 +1,4 @@
-import type { SimulationResult, SerializedTx, RpcEndpoint, DeserializedTx, Signer, SendraError } from "@repo/types/index"
+import type { SimulationResult, SerializedTx, RpcEndpoint, DeserializedTx, Signer, SendraError } from "@repo/types"
 import {
     Connection,
     VersionedTransaction,
@@ -10,7 +10,7 @@ export async function SimulateTx(tx: DeserializedTx, RPC_URL: RpcEndpoint, signe
         const serializedTx = tx.serialize();
         const deserializedTx = VersionedTransaction.deserialize(serializedTx);
         const res = await connection.simulateTransaction(deserializedTx);
-        
+
         if (res.value?.err) {
             const error: SendraError = {
                 type: "SIMULATION_FAIL",
@@ -24,7 +24,7 @@ export async function SimulateTx(tx: DeserializedTx, RPC_URL: RpcEndpoint, signe
                 transaction: deserializedTx
             };
         }
-        
+
         return {
             success: true,
             logs: res.value?.logs || [],

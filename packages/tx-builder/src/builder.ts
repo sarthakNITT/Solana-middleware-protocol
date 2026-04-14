@@ -1,4 +1,4 @@
-import type { DeserializedTx, RpcEndpoint, SendraParams, Signer } from "@repo/types/index";
+import type { DeserializedTx, RpcEndpoint, SendraParams, Signer } from "@repo/types";
 import { Connection, PublicKey, SystemProgram, TransactionMessage, VersionedTransaction } from "@solana/web3.js";
 
 export async function BuildTx(rpc: RpcEndpoint, signer: Signer, params: SendraParams): Promise<DeserializedTx> {

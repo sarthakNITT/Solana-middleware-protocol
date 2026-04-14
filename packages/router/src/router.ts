@@ -1,10 +1,10 @@
-import type { RpcEndpoint } from "@repo/types/index"
+import type { RpcEndpoint } from "@repo/types"
 import {
     SOLANA_ALCHEMY_RPC_URL,
     SOLANA_DEVNET_RPC_URL,
     SOLANA_HELIUS_RPC_URL,
     SOLANA_QUICKNODE_RPC_URL
-} from "@repo/config/index";
+} from "@repo/config";
 import { Connection } from "@solana/web3.js"
 
 export async function selectRpc(): Promise<RpcEndpoint> {

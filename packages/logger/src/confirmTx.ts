@@ -1,5 +1,5 @@
-import { RpcEndpoint, Signature, SendraError } from "@repo/types/index";
-import { getTxStatus } from "@repo/rpc-client/status"
+import { RpcEndpoint, Signature, SendraError } from "@repo/types";
+import { getTxStatus } from "@repo/rpc-client"
 
 function sleep(ms: number) {
     return new Promise((res) => setTimeout(res, ms));

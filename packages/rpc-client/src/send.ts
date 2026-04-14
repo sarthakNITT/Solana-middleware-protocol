@@ -1,8 +1,8 @@
-import type { DeserializedTx, RpcEndpoint, SendraError } from "@repo/types/index";
+import type { DeserializedTx, RpcEndpoint, SendraError } from "@repo/types";
 import {
     Connection,
 } from "@solana/web3.js";
-import { SOLANA_DEVNET_RPC_URL } from "@repo/config/index"
+import { SOLANA_DEVNET_RPC_URL } from "@repo/config"
 
 export async function SendTx(tx: DeserializedTx, RPC_URL: RpcEndpoint): Promise<{ success: true, signature: string } | { success: false, error: SendraError }> {
     try {
