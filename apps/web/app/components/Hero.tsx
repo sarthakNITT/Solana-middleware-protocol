@@ -25,17 +25,17 @@ export default function Hero({ heroRef, heroY, heroOpacity }: { heroRef: any, he
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5 }}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 rounded-md mb-8"
-                        style={{ border: "1px solid rgba(255,255,255,0.08)", background: "rgba(255,255,255,0.03)" }}
+                        className="inline-flex flex-col items-center justify-center gap-1.5 px-4 py-2.5 rounded-sm mb-8"
+                        style={{ border: "1px solid rgba(255,255,255,0.04)", background: "rgba(0, 0, 0, 0.2)" }}
                     >
-                        <motion.span
-                            animate={{ opacity: [0.5, 1, 0.5] }}
+                        <span className="text-[8px] font-medium text-white/70 tracking-wide leading-none uppercase">Built for</span>
+                        <motion.img
+                            animate={{ opacity: [0.8, 1, 0.8] }}
                             transition={{ duration: 2.2, repeat: Infinity }}
-                            className="w-4 h-4 rounded bg-[#6366f1] flex items-center justify-center font-bold text-white text-[10px]"
-                        >
-                            S
-                        </motion.span>
-                        <span className="text-[12px] font-sans text-white/70 tracking-wide">Built for <strong className="text-white/90 font-semibold">Solana</strong></span>
+                            src="/solanaLogo.svg"
+                            alt="Solana Logo"
+                            className="h-[14px] w-auto relative top-[1px]"
+                        />
                     </motion.div>
 
                     {/* H1 */}
@@ -66,9 +66,9 @@ export default function Hero({ heroRef, heroY, heroOpacity }: { heroRef: any, he
                         className="flex flex-col sm:flex-row items-center gap-4 justify-center mb-20"
                     >
                         <Link href="/demo">
-                            <PrimaryButton>START FOR FREE</PrimaryButton>
+                            <PrimaryButton size="md">START FOR FREE</PrimaryButton>
                         </Link>
-                        <GhostButton>BOOK A DEMO</GhostButton>
+                        <GhostButton size="md">BOOK A DEMO</GhostButton>
                     </motion.div>
 
                     {/* New Code Snippet in Hero */}

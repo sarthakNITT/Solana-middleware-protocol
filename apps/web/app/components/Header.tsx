@@ -34,8 +34,8 @@ export default function Header() {
                         ))}
                     </div>
                     <div className="flex flex-1 items-center justify-end gap-2">
-                        <GhostButton>Read docs</GhostButton>
-                        <Link href="/demo"><PrimaryButton>Try Demo</PrimaryButton></Link>
+                        <GhostButton size="sm">Read docs</GhostButton>
+                        <Link href="/demo"><PrimaryButton size="sm">Try Demo</PrimaryButton></Link>
                     </div>
                 </nav>
             </header>
