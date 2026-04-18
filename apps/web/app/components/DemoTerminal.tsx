@@ -12,14 +12,32 @@ export function DemoTerminal() {
         setVisible([]); setRunning(false);
         setTimeout(() => {
             setRunning(true);
-            demoLogs.forEach((log, i) => setTimeout(() => setVisible(v => [...v, i]), log.delay));
+            let totalDelay = 0;
+
+            demoLogs.forEach((log, i) => {
+                const jitter = Math.random() * 500;
+                totalDelay += log.delay + jitter;
+
+                setTimeout(() => {
+                    setVisible(v => [...v, i]);
+                }, totalDelay);
+            });
         }, 80);
     }, []);
 
     useEffect(() => {
         if (!inView || running) return;
         setRunning(true);
-        demoLogs.forEach((log, i) => setTimeout(() => setVisible(v => [...v, i]), log.delay));
+        let totalDelay = 0;
+
+        demoLogs.forEach((log, i) => {
+            const jitter = Math.random() * 500;
+            totalDelay += log.delay + jitter;
+
+            setTimeout(() => {
+                setVisible(v => [...v, i]);
+            }, totalDelay);
+        });
     }, [inView]);
 
     const colorMap: Record<string, string> = {
@@ -70,7 +88,7 @@ export function DemoTerminal() {
                     </div>
 
                     {/* Logs */}
-                    <div className="p-5 font-mono text-[11px] space-y-2 min-h-[260px]">
+                    <div className="p-5 font-mono text-[11px] space-y-2 min-h-[500px]">
                         <AnimatePresence>
                             {visible.map(i => {
                                 const log = demoLogs[i];

@@ -13,16 +13,49 @@ export const pipeline = [
 ];
 
 export const demoLogs = [
-    { type: "info", text: "Initializing transaction simulation...", delay: 0 },
-    { type: "success", text: "Simulation passed — no revert detected", delay: 900 },
-    { type: "info", text: "Computing optimal compute unit price...", delay: 1700 },
-    { type: "success", text: "Fee optimized: 0.000031 SOL (saved 42%)", delay: 2600 },
-    { type: "info", text: "Selecting best RPC endpoint (latency scan)...", delay: 3400 },
-    { type: "success", text: "Routed to primary: ny1.helius-rpc.com (12ms)", delay: 4200 },
-    { type: "info", text: "Sending transaction...", delay: 5000 },
-    { type: "warn", text: "Attempt 1 timed out — switching RPC node", delay: 5900 },
-    { type: "info", text: "Retrying via fallback: fra1.helius-rpc.com...", delay: 6700 },
-    { type: "success", text: "✓ Confirmed in slot 312,847,291 (1.2s)", delay: 7600 },
+    { type: "info", text: "[INIT] Starting transaction execution...", delay: 200 },
+
+    { type: "info", text: "[RPC] Selecting fastest RPC endpoint...", delay: 600 },
+    { type: "success", text: "[RPC_SELECTED] Helius (42ms latency)", delay: 1000 },
+
+    { type: "info", text: "[BUILD] Constructing transaction...", delay: 1400 },
+    { type: "info", text: "[SIMULATION] Running pre-flight simulation...", delay: 1800 },
+    { type: "success", text: "[SIMULATION] Success — no errors detected", delay: 2200 },
+
+    { type: "info", text: "[FEE] Calculating optimal priority fee...", delay: 2600 },
+    { type: "success", text: "[FEE_APPLIED] 5,000 micro-lamports", delay: 3000 },
+
+    { type: "info", text: "[SIGN] Awaiting wallet signature...", delay: 3400 },
+    { type: "success", text: "[SIGNED] Transaction signed successfully", delay: 3800 },
+
+    { type: "info", text: "[SEND] Broadcasting transaction...", delay: 4200 },
+    { type: "info", text: "[STATUS] Pending confirmation...", delay: 4600 },
+
+    // 🔴 FAILURE SIMULATION
+    { type: "warn", text: "[DELAY] Network congestion detected", delay: 5200 },
+    { type: "error", text: "[FAILED] Transaction not confirmed in time", delay: 5800 },
+
+    // 🔁 RETRY FLOW
+    { type: "info", text: "[RETRY] Attempt 2 initiated...", delay: 6400 },
+    { type: "info", text: "[RPC] Switching RPC endpoint...", delay: 6800 },
+    { type: "success", text: "[RPC_SELECTED] QuickNode (28ms latency)", delay: 7200 },
+
+    { type: "info", text: "[REBUILD] Fetching new blockhash...", delay: 7600 },
+    { type: "info", text: "[FEE] Increasing priority fee...", delay: 8000 },
+    { type: "success", text: "[FEE_BUMP] +20% (6,000 micro-lamports)", delay: 8400 },
+
+    { type: "info", text: "[SIMULATION] Re-validating transaction...", delay: 8800 },
+    { type: "success", text: "[SIMULATION] Success", delay: 9200 },
+
+    { type: "info", text: "[SIGN] Re-signing transaction...", delay: 9600 },
+    { type: "success", text: "[SIGNED] Signature updated", delay: 10000 },
+
+    { type: "info", text: "[SEND] Re-broadcasting transaction...", delay: 10400 },
+    { type: "info", text: "[STATUS] Confirming...", delay: 10800 },
+
+    // ✅ SUCCESS
+    { type: "success", text: "[CONFIRMED] Transaction landed successfully", delay: 11400 },
+    { type: "success", text: "[FINAL] Execution completed in 2 attempts", delay: 12000 },
 ];
 
 export const faqData = [

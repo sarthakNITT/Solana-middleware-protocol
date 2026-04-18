@@ -2,10 +2,11 @@ import { LogEvent, logs, SendraOptions, SendraParams, Signer } from "@repo/types
 import { selectRpc } from "@repo/router"
 import { SimulateTx } from "@repo/simulator";
 import { SendTx } from "@repo/rpc-client"
-import { BuildTx } from "@repo/tx-builder";
+import { BuildTx, newTxMessageFromOld } from "@repo/tx-builder";
 import { optimizeFee } from "@repo/fee-optimizer";
 import { ConfirmTx } from "@repo/logger";
 import { logEvent } from "@repo/logger";
+import { Connection, VersionedTransaction } from "@solana/web3.js";
 
 export async function SendWithReliability(params: SendraParams, signer: Signer, options: SendraOptions) {
     let attempt = 0;
@@ -17,13 +18,35 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
         rpc: rpc.url,
     }, logs);
 
-    const { tx, lastValidBlockHeight } = await BuildTx(rpc, signer, params);
-    logEvent({
-        step: "TX_BUILT",
-        rpc: rpc.url
-    }, logs);
+    let tx, lastValidBlockHeight;
+    let originalTx = tx!;
+    if (params.type === "params") {
+        const build = await BuildTx(rpc, signer, params);
+        tx = build.tx;
+        lastValidBlockHeight = build.lastValidBlockHeight;
+        logEvent({
+            step: "TX_BUILT",
+            rpc: rpc.url
+        }, logs);
+    }
 
-    const optimisedTx = await optimizeFee(tx, rpc);
+    if (params.type === "built") {
+        if (params.serializedTx === true) {
+            tx = VersionedTransaction.deserialize(params.transaction);
+        } else {
+            tx = params.transaction;
+        }
+        const connection = new Connection(`${rpc.url}`, "confirmed");
+        const { blockhash, lastValidBlockHeight: lvbh } = await connection.getLatestBlockhash();
+        tx.message.recentBlockhash = blockhash;
+        lastValidBlockHeight = lvbh;
+        logEvent({
+            step: "TX_LOADED",
+            rpc: rpc.url
+        }, logs);
+    }
+
+    const optimisedTx = await optimizeFee(tx!, rpc);
     logEvent({
         step: "FEE_OPTIMIZED",
         fee: optimisedTx.fee
@@ -80,7 +103,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
     }
 
     if (!sendFailed) {
-        const result = await ConfirmTx(rpc, signature!, lastValidBlockHeight);
+        const result = await ConfirmTx(rpc, signature!, lastValidBlockHeight!);
         if (result.success) {
             logEvent({
                 step: "TX_CONFIRMED",
@@ -111,7 +134,24 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
             rpc: currentRpc.url
         }, logs);
 
-        const { tx: newTx, lastValidBlockHeight } = await BuildTx(currentRpc, signer, params);
+        let newTx: VersionedTransaction;
+        let newLastValidBlockHeight: number;
+
+        if (params.type === "params") {
+            const built = await BuildTx(currentRpc, signer, params);
+            newTx = built.tx;
+            newLastValidBlockHeight = built.lastValidBlockHeight;
+        } else {
+            const connection = new Connection(`${currentRpc.url}`, "confirmed");
+            const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
+
+            const message = newTxMessageFromOld(originalTx, blockhash);
+            newTx = new VersionedTransaction(message);
+            originalTx = newTx;
+            newLastValidBlockHeight = lastValidBlockHeight;
+        }
+
+        lastValidBlockHeight = newLastValidBlockHeight;
         logEvent({
             step: "TX_BUILT",
             rpc: currentRpc.url,
