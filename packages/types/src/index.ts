@@ -67,6 +67,7 @@ export type SendraParams = BuiltTxInput | ParamsInput;
 
 export type SendraOptions = {
     maxRetries: number;
+    logger?: (log: LogEvent) => void;
 };
 
 export type SendraResult = {

@@ -12,12 +12,13 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
     const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
     let attempt = 0;
     const logs: logs = [];
+    const logger = options?.logger;
 
     const rpc = await selectRpc();
     logEvent({
         step: "RPC_SELECTED",
         rpc: rpc.url,
-    }, logs);
+    }, logs, logger);
 
     let tx: DeserializedTx, lastValidBlockHeight: number;
     let originalTx: DeserializedTx;
@@ -29,7 +30,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
         logEvent({
             step: "TX_BUILT",
             rpc: rpc.url
-        }, logs);
+        }, logs, logger);
     }
 
     if (params.type === "built") {
@@ -47,34 +48,34 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
         logEvent({
             step: "TX_LOADED",
             rpc: rpc.url
-        }, logs);
+        }, logs, logger);
     }
 
     const optimisedTx = await optimizeFee(tx!, rpc);
     logEvent({
         step: "FEE_OPTIMIZED",
         fee: optimisedTx.fee
-    }, logs);
+    }, logs, logger);
 
     const simulateResult = await SimulateTx(optimisedTx.transaction, rpc, signer);
     if (!simulateResult.success) {
         logEvent({
             step: "SIMULATION_FAILED",
             message: "failed"
-        }, logs);
+        }, logs, logger);
         return { success: false, error: simulateResult.error, logs };
     }
     logEvent({
         step: "SIMULATION_SUCCESS",
         message: "success"
-    }, logs);
+    }, logs, logger);
 
     const signedTx = await signer.signTransaction(simulateResult.transaction);
     logEvent({
         step: "TX_SIGNED",
         attempt: attempt,
         rpc: rpc.url
-    }, logs);
+    }, logs, logger);
 
     let sendFailed = false;
     let signature;
@@ -85,14 +86,14 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
             step: "TX_SENT",
             attempt: attempt,
             rpc: rpc.url
-        }, logs);
+        }, logs, logger);
     } catch (error: any) {
         if (error.message?.includes("Blockhash not found") || error.message?.toLowerCase().includes("blockhash")) {
             logEvent({
                 step: "BLOCKHASH_EXPIRED",
                 attempt,
                 rpc: rpc.url
-            }, logs);
+            }, logs, logger);
 
             sendFailed = true;
         } else {
@@ -101,7 +102,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
                 attempt: attempt,
                 rpc: rpc.url,
                 message: error.message
-            }, logs);
+            }, logs, logger);
             throw error;
         }
     }
@@ -112,13 +113,13 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
             logEvent({
                 step: "TX_CONFIRMED",
                 rpc: rpc.url,
-            }, logs);
+            }, logs, logger);
             return { ...result, logs };
         } else {
             logEvent({
                 step: "TX_NOT_CONFIRMED",
                 rpc: rpc.url,
-            }, logs);
+            }, logs, logger);
 
             sendFailed = true;
         }
@@ -129,24 +130,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
         step: "ATTEMPT_FAILED",
         attempt: attempt,
         message: "starting retries"
-    }, logs);
-
-    // if (sendFailed) {
-    //     failureReason = classifyFailure({ message: "blockhash" }, null);
-    // } else {
-    //     const result = await ConfirmTx(rpc, signature!, lastValidBlockHeight!);
-    //     if (result.success) {
-    //         logEvent({ step: "TX_CONFIRMED", rpc: rpc.url }, logs);
-    //         return { ...result, logs };
-    //     } else {
-    //         failureReason = classifyFailure(null, result);
-    //     }
-    // }
-    // logEvent({
-    //     step: "FAILURE_CLASSIFIED",
-    //     attempt,
-    //     message: failureReason
-    // }, logs);
+    }, logs, logger);
 
     while (attempt < options.maxRetries) {
         await sleep(500 + attempt * 300);
@@ -155,14 +139,14 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
         logEvent({
             step: "RETRY_ATTEMPT",
             attempt: attempt
-        }, logs);
+        }, logs, logger);
 
         const currentRpc = await selectRpc();
         logEvent({
             step: "RPC_SELECTED",
             attempt: attempt,
             rpc: currentRpc.url
-        }, logs);
+        }, logs, logger);
 
         let newTx: VersionedTransaction;
         let newLastValidBlockHeight: number;
@@ -185,14 +169,14 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
         logEvent({
             step: "TX_BUILT",
             rpc: currentRpc.url,
-        }, logs);
+        }, logs, logger);
 
         const reOptimized = await optimizeFee(newTx, currentRpc, lastFee);
         logEvent({
             step: "FEE_REOPTIMIZED",
             attempt: attempt,
             fee: reOptimized.fee
-        }, logs);
+        }, logs, logger);
         lastFee = reOptimized.fee;
 
         const sim = await SimulateTx(reOptimized.transaction, currentRpc, signer);
@@ -201,20 +185,20 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
                 step: "RETRY_SIMULATION_FAILED",
                 attempt: attempt,
                 message: "failed"
-            }, logs);
+            }, logs, logger);
             return { success: false, error: sim.error, logs };
         }
         logEvent({
             step: "RETRY_SIMULATION_SUCCESS",
             attempt: attempt,
             message: "success"
-        }, logs);
+        }, logs, logger);
 
         const signedTx = await signer.signTransaction(sim.transaction);
         logEvent({
             step: "TX_SIGNED",
             rpc: currentRpc.url,
-        }, logs);
+        }, logs, logger);
 
         let signature;
 
@@ -224,14 +208,14 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
                 step: "TX_SENT",
                 attempt: attempt,
                 rpc: currentRpc.url
-            }, logs);
+            }, logs, logger);
         } catch (error: any) {
             failureReason = classifyFailure(error, null);
             logEvent({
                 step: "RETRY_FAILED_REASON",
                 attempt,
                 message: failureReason
-            }, logs);
+            }, logs, logger);
             if (failureReason === "BLOCKHASH_EXPIRED") {
                 continue;
             }
@@ -249,32 +233,32 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
                 step: "RETRY_FAILED_REASON",
                 attempt,
                 message: failureReason
-            }, logs);
+            }, logs, logger);
         }
         if (failureReason === "BLOCKHASH_EXPIRED") {
-            logEvent({ step: "ACTION", message: "REBUILD_TX" }, logs);
+            logEvent({ step: "ACTION", message: "REBUILD_TX" }, logs, logger);
         }
 
         if (failureReason === "RPC_ERROR") {
-            logEvent({ step: "ACTION", message: "SWITCH_RPC" }, logs);
+            logEvent({ step: "ACTION", message: "SWITCH_RPC" }, logs, logger);
         }
 
         if (failureReason === "CONGESTION") {
-            logEvent({ step: "ACTION", message: "INCREASE_FEE" }, logs);
+            logEvent({ step: "ACTION", message: "INCREASE_FEE" }, logs, logger);
         }
 
         if (result.success) {
             logEvent({
                 step: "TX_CONFIRMED_AFTER_RETRY",
                 attempt: attempt
-            }, logs);
+            }, logs, logger);
             return { ...result, logs };
         }
     }
     logEvent({
         step: "MAX_RETRIES_EXCEEDED",
         attempt: attempt
-    }, logs);
+    }, logs, logger);
     return {
         success: false,
         error: "Max retries reached",
