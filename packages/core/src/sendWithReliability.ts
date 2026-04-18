@@ -1,14 +1,15 @@
-import { LogEvent, logs, SendraOptions, SendraParams, Signer } from "@repo/types";
+import { DeserializedTx, LogEvent, logs, SendraOptions, SendraParams, SerializedTx, Signer } from "@repo/types";
 import { selectRpc } from "@repo/router"
 import { SimulateTx } from "@repo/simulator";
 import { SendTx } from "@repo/rpc-client"
 import { BuildTx, newTxMessageFromOld } from "@repo/tx-builder";
 import { optimizeFee } from "@repo/fee-optimizer";
-import { ConfirmTx } from "@repo/logger";
+import { ConfirmTx, classifyFailure } from "@repo/logger";
 import { logEvent } from "@repo/logger";
 import { Connection, VersionedTransaction } from "@solana/web3.js";
 
 export async function SendWithReliability(params: SendraParams, signer: Signer, options: SendraOptions) {
+    const sleep = (ms: number) => new Promise(res => setTimeout(res, ms));
     let attempt = 0;
     const logs: logs = [];
 
@@ -18,11 +19,12 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
         rpc: rpc.url,
     }, logs);
 
-    let tx, lastValidBlockHeight;
-    let originalTx = tx!;
+    let tx: DeserializedTx, lastValidBlockHeight: number;
+    let originalTx: DeserializedTx;
     if (params.type === "params") {
         const build = await BuildTx(rpc, signer, params);
         tx = build.tx;
+        originalTx = tx;
         lastValidBlockHeight = build.lastValidBlockHeight;
         logEvent({
             step: "TX_BUILT",
@@ -33,8 +35,10 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
     if (params.type === "built") {
         if (params.serializedTx === true) {
             tx = VersionedTransaction.deserialize(params.transaction);
+            originalTx = tx;
         } else {
             tx = params.transaction;
+            originalTx = tx;
         }
         const connection = new Connection(`${rpc.url}`, "confirmed");
         const { blockhash, lastValidBlockHeight: lvbh } = await connection.getLatestBlockhash();
@@ -83,7 +87,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
             rpc: rpc.url
         }, logs);
     } catch (error: any) {
-        if (error.message?.includes("Blockhash not found")) {
+        if (error.message?.includes("Blockhash not found") || error.message?.toLowerCase().includes("blockhash")) {
             logEvent({
                 step: "BLOCKHASH_EXPIRED",
                 attempt,
@@ -110,17 +114,43 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
                 rpc: rpc.url,
             }, logs);
             return { ...result, logs };
+        } else {
+            logEvent({
+                step: "TX_NOT_CONFIRMED",
+                rpc: rpc.url,
+            }, logs);
+
+            sendFailed = true;
         }
     }
 
     let lastFee = optimisedTx.fee;
     logEvent({
-        step: "INITIAL_ATTEMPT_FAILED",
+        step: "ATTEMPT_FAILED",
         attempt: attempt,
         message: "starting retries"
     }, logs);
 
+    // if (sendFailed) {
+    //     failureReason = classifyFailure({ message: "blockhash" }, null);
+    // } else {
+    //     const result = await ConfirmTx(rpc, signature!, lastValidBlockHeight!);
+    //     if (result.success) {
+    //         logEvent({ step: "TX_CONFIRMED", rpc: rpc.url }, logs);
+    //         return { ...result, logs };
+    //     } else {
+    //         failureReason = classifyFailure(null, result);
+    //     }
+    // }
+    // logEvent({
+    //     step: "FAILURE_CLASSIFIED",
+    //     attempt,
+    //     message: failureReason
+    // }, logs);
+
     while (attempt < options.maxRetries) {
+        await sleep(500 + attempt * 300);
+        let failureReason = "UNKNOWN";
         attempt++;
         logEvent({
             step: "RETRY_ATTEMPT",
@@ -145,7 +175,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
             const connection = new Connection(`${currentRpc.url}`, "confirmed");
             const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash();
 
-            const message = newTxMessageFromOld(originalTx, blockhash);
+            const message = newTxMessageFromOld(originalTx!, blockhash);
             newTx = new VersionedTransaction(message);
             originalTx = newTx;
             newLastValidBlockHeight = lastValidBlockHeight;
@@ -196,35 +226,46 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
                 rpc: currentRpc.url
             }, logs);
         } catch (error: any) {
-            if (error.message?.includes("Blockhash not found")) {
-                logEvent({
-                    step: "RETRY_BLOCKHASH_EXPIRED",
-                    attempt,
-                    rpc: currentRpc.url
-                }, logs);
-
+            failureReason = classifyFailure(error, null);
+            logEvent({
+                step: "RETRY_FAILED_REASON",
+                attempt,
+                message: failureReason
+            }, logs);
+            if (failureReason === "BLOCKHASH_EXPIRED") {
                 continue;
-            } else {
-                logEvent({
-                    step: "RETRY_SEND_FAILED",
-                    attempt,
-                    rpc: currentRpc.url,
-                    message: error.message
-                }, logs);
-                throw error;
             }
+            if (failureReason === "RPC_ERROR") {
+                continue;
+            }
+            throw error;
         }
 
         const result = await ConfirmTx(currentRpc, signature!, lastValidBlockHeight);
-        logEvent({
-            step: "RETRY_STATUS",
-            attempt: attempt,
-            message: result.success ? "confirmed" : "failed"
-        }, logs);
+        if (!result.success) {
+            failureReason = classifyFailure(null, result);
+
+            logEvent({
+                step: "RETRY_FAILED_REASON",
+                attempt,
+                message: failureReason
+            }, logs);
+        }
+        if (failureReason === "BLOCKHASH_EXPIRED") {
+            logEvent({ step: "ACTION", message: "REBUILD_TX" }, logs);
+        }
+
+        if (failureReason === "RPC_ERROR") {
+            logEvent({ step: "ACTION", message: "SWITCH_RPC" }, logs);
+        }
+
+        if (failureReason === "CONGESTION") {
+            logEvent({ step: "ACTION", message: "INCREASE_FEE" }, logs);
+        }
 
         if (result.success) {
             logEvent({
-                step: "SUCCESS",
+                step: "TX_CONFIRMED_AFTER_RETRY",
                 attempt: attempt
             }, logs);
             return { ...result, logs };
@@ -237,6 +278,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
     return {
         success: false,
         error: "Max retries reached",
+        attempts: attempt,
         logs
     };
 }

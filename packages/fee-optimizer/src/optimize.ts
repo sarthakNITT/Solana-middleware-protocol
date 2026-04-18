@@ -6,12 +6,23 @@ export async function optimizeFee(tx: DeserializedTx, RPC_URL: RpcEndpoint, prev
     try {
         console.log("Starting fee optimization...");
         let newFee: number;
-        
+
         if (prevFee !== undefined) {
             console.log("Previous fee provided:", prevFee);
-            newFee = Math.floor(prevFee * 1.2);
-            console.log("Calculated 20% increased fee:", newFee);
-            
+            const connection = new Connection(`${RPC_URL.url}`, "confirmed");
+            const fees = await connection.getRecentPrioritizationFees();
+            const validFees = fees
+                .map(f => f.prioritizationFee)
+                .filter(f => f > 0)
+                .sort((a, b) => a - b);
+            let p75 = prevFee;
+            if (validFees.length > 0) {
+                const index = Math.floor(validFees.length * 0.75);
+                p75 = validFees[index]!;
+            }
+            newFee = Math.max(Math.floor(prevFee * 1.3), p75);
+            console.log("Calculated 1.3x increased fee:", newFee);
+
             const newTxWithFee = await applyPriorityFee(tx, newFee);
             return {
                 transaction: newTxWithFee,
@@ -21,9 +32,9 @@ export async function optimizeFee(tx: DeserializedTx, RPC_URL: RpcEndpoint, prev
             console.log("No previous fee. Fetching recent prioritization fees from cluster...");
             const connection = new Connection(`${RPC_URL.url}`, "confirmed");
             const getFee = await connection.getRecentPrioritizationFees();
-            
+
             let validFees: number[] = [];
-            
+
             for (let i = 0; i < getFee.length; i++) {
                 const feeObject = getFee[i];
                 if (feeObject !== undefined) {
@@ -37,22 +48,12 @@ export async function optimizeFee(tx: DeserializedTx, RPC_URL: RpcEndpoint, prev
             console.log("Found valid priority fees:", validFees.length);
 
             let baseFee: number = 0;
-            
-            if (validFees.length !== 0) {
-                // simple bubble sorting for beginner friendly logic manually sorting max top fee
-                for (let i = 0; i < validFees.length; i++) {
-                    for (let j = 0; j < validFees.length - 1 - i; j++) {
-                        if (validFees[j]! > validFees[j + 1]!) {
-                            let temp = validFees[j]!;
-                            validFees[j] = validFees[j + 1]!;
-                            validFees[j + 1] = temp;
-                        }
-                    }
-                }
 
+            if (validFees.length !== 0) {
+                validFees.sort((a, b) => a - b)
                 const length = validFees.length;
                 const half = Math.floor(length / 2);
-                
+
                 if (length % 2 !== 0) {
                     baseFee = validFees[half]!;
                 } else {
@@ -61,7 +62,7 @@ export async function optimizeFee(tx: DeserializedTx, RPC_URL: RpcEndpoint, prev
                     baseFee = Math.floor((firstMiddle + secondMiddle) / 2);
                 }
             }
-            
+
             console.log("Final base fee calculated:", baseFee);
 
             const newTxWithFee = await applyPriorityFee(tx, baseFee);

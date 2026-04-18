@@ -32,3 +32,21 @@ export async function ConfirmTx(rpc: RpcEndpoint, signature: Signature, lastVali
         await sleep(intervalMs);
     }
 }
+
+export function classifyFailure(error: any, confirmResult: any): string {
+    const msg = error?.message?.toLowerCase() || "";
+
+    if (msg.includes("blockhash")) {
+        return "BLOCKHASH_EXPIRED";
+    }
+
+    if (msg.includes("fetch") || msg.includes("timeout") || msg.includes("rpc")) {
+        return "RPC_ERROR";
+    }
+
+    if (confirmResult && !confirmResult.success) {
+        return "CONGESTION";
+    }
+
+    return "UNKNOWN";
+}
