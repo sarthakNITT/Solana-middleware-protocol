@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5.9% 10%;
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    @apply bg-background text-foreground selection:bg-zinc-200 dark:selection:bg-zinc-800;
+  }
+}
+
+/* 
+   SCROLLBAR REFINEMENT
+*/
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-zinc-200 dark:bg-zinc-800 rounded-full transition-colors;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-zinc-300 dark:bg-zinc-700;
+}
+
+/* 
+   SHADCN UI TYPOGRAPHY & SPACING SYSTEM
+*/
+.docs-content {
+  @apply mx-auto max-w-[720px] text-[14px] leading-6 text-zinc-600 dark:text-zinc-300;
+}
+
+.docs-content h1 {
+  @apply scroll-m-32 text-3xl font-bold tracking-tight text-zinc-900 dark:text-zinc-50 mb-4 mt-2;
+}
+
+.docs-content h2 {
+  @apply scroll-m-32 border-b border-zinc-100 dark:border-zinc-800 pb-2 text-xl font-semibold tracking-tight first:mt-0 mt-10 mb-4 text-zinc-900 dark:text-zinc-50;
+}
+
+.docs-content h3 {
+  @apply scroll-m-32 text-lg font-semibold tracking-tight mt-8 mb-3 text-zinc-900 dark:text-zinc-50;
+}
+
+.docs-content p {
+  @apply mb-4 last:mb-0;
+}
+
+/* SIDEBAR SYSTEM — MATCHING IMAGE */
+.sidebar-link {
+  @apply flex items-center py-1.5 px-3 rounded-md text-[14px] transition-all duration-200 hover:text-zinc-900 dark:hover:text-zinc-100 text-zinc-500;
+}
+
+.sidebar-link-active {
+  @apply bg-zinc-100 dark:bg-zinc-800 font-medium text-zinc-900 dark:text-zinc-50;
+}
+
+.sidebar-group-title {
+  @apply mb-2 px-3 text-[12px] font-normal lowercase tracking-wide text-zinc-400 dark:text-zinc-500;
+}
+
+.sidebar-dot {
+  @apply ml-2 h-1.5 w-1.5 rounded-full bg-blue-500;
+}
+
+/* CODE BLOCKS */
+.docs-content pre {
+  @apply my-4 overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-950 font-mono text-sm leading-relaxed;
+  background-color: #0a0a0a !important; 
+  border: 1px solid #27272a !important;
+}
+
+.docs-content pre code {
+  @apply text-zinc-300 font-mono bg-transparent p-0 border-0;
+}
+
+.docs-content :not(pre) > code {
+  @apply relative rounded-sm bg-zinc-100 dark:bg-zinc-800 px-[0.3rem] py-[0.1rem] font-mono text-[12.5px] font-medium text-zinc-900 dark:text-zinc-200;
+}
+
+/* TOC */
+.toc-link {
+  @apply block py-1 text-sm transition-colors duration-200 hover:text-zinc-900 dark:hover:text-zinc-100;
+}
+.toc-link-active {
+  @apply text-zinc-900 dark:text-zinc-100 font-medium;
+}
+.toc-link-inactive {
+  @apply text-zinc-500;
+}
