@@ -2,7 +2,8 @@
 
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import SyntaxHighlighter from "react-syntax-highlighter";
+import SyntaxHighlighterOriginal from "react-syntax-highlighter";
+const SyntaxHighlighter = SyntaxHighlighterOriginal as any;
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 const CopyIcon = () => (
