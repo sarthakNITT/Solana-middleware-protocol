@@ -1,4 +1,5 @@
 import { LogEvent } from "@repo/types";
+import type { TransactionFileLogger } from "./fileLogger";
 
 const c = {
     reset: "\x1b[0m",
@@ -162,7 +163,8 @@ function formatEventForConsole(event: LogEvent): string {
 export function logEvent(
     event: LogEvent,
     logs?: LogEvent[],
-    logger?: (log: LogEvent) => void
+    logger?: (log: LogEvent) => void,
+    fileLogger?: TransactionFileLogger
 ) {
     // Always append to logs array if provided
     if (logs) logs.push(event);
@@ -172,4 +174,7 @@ export function logEvent(
 
     // Also call custom logger callback if provided (for dashboard UI streaming)
     if (logger) logger(event);
+
+    // Write to per-transaction debug log file (SDK developer debugging)
+    if (fileLogger) fileLogger.log(event);
 }
