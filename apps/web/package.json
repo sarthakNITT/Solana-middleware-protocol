@@ -19,7 +19,7 @@
     "@solana/wallet-adapter-wallets": "^0.19.38",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/react-syntax-highlighter": "^15.5.13",
-    "sendra": "workspace:*",
+    "sendra-tx": "workspace:*",
     "framer-motion": "^12.38.0",
     "next": "16.2.0",
     "react": "^19.2.0",
