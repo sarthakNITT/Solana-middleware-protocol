@@ -1,24 +1,42 @@
 {
-  "name": "@repo/sdk",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "module": "src/index.ts",
+  "name": "sendra",
+  "version": "0.1.0",
+  "description": "Solana transaction reliability layer — automatic RPC routing, fee optimization, simulation, and retry engine",
+  "author": "Sarthak Karode",
+  "license": "MIT",
   "type": "module",
-  "scripts": {
-    "build": "tsc --build",
-    "check-types": "tsc --noEmit",
-    "dev": "tsc --build --watch"
-  },
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
-    "./*": "./src/*.ts"
+    ".": {
+      "import": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.js"
+      },
+      "require": {
+        "types": "./dist/index.d.cts",
+        "default": "./dist/index.cjs"
+      }
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup && cp src/types.d.ts dist/index.d.ts && cp src/types.d.ts dist/index.d.cts",
+    "build:tsc": "tsc --build",
+    "check-types": "tsc --noEmit",
+    "dev": "tsup --watch",
+    "clean": "rm -rf dist",
+    "prepublishOnly": "npm run clean && npm run build"
   },
   "devDependencies": {
     "@types/bun": "latest",
     "@repo/core": "workspace:*",
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
     "@repo/config": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
     "@repo/fee-optimizer": "workspace:*",
     "@repo/logger": "workspace:*",
     "@repo/retry-engine": "workspace:*",
@@ -26,13 +44,29 @@
     "@repo/rpc-client": "workspace:*",
     "@repo/simulator": "workspace:*",
     "@repo/types": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@repo/utils": "workspace:*",
-    "@repo/tx-builder": "workspace:*"
+    "@repo/tx-builder": "workspace:*",
+    "tsup": "^8.4.0",
+    "typescript": "^5.9.2"
   },
   "peerDependencies": {
-    "typescript": "^5"
+    "@solana/web3.js": "^1.98.0"
   },
-  "dependencies": {
-    "@solana/web3.js": "^1.98.4"
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "solana",
+    "transaction",
+    "reliability",
+    "rpc",
+    "retry",
+    "fee-optimization",
+    "web3"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sarthakNITT/Solana-middleware-protocol"
   }
 }

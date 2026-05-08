@@ -182,26 +182,20 @@ export default function DemoPage() {
     processingRef.current = true;
     while (logQueueRef.current.length > 0) {
       const item = logQueueRef.current.shift()!;
-      // Small delay between visual updates for realistic feel
       await new Promise(r => setTimeout(r, 100 + Math.random() * 150));
-      // Update terminal log
       const termLog = eventToTerminalLog(item);
       const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
       setLogs(prev => [...prev, { ...termLog, time, id: Math.random() }]);
-      // Update SDK execution trace
       setSdkLogs(prev => [...prev, { ...item, _ts: Date.now() }]);
-      // Update pipeline
       const pipelineId = EVENT_TO_PIPELINE[item.step];
       if (pipelineId) {
         setActiveStage(pipelineId);
-        // Mark previous stage as completed when a new one activates
         setCompletedStages(prev => {
           const next = new Set(prev);
           if (pipelineId) next.add(pipelineId);
           return next;
         });
       }
-      // Update transaction status
       if (item.step === "TX_SENT") setTxStatus("broadcasting");
       if (item.step === "RETRY_ATTEMPT") setTxStatus("retrying");
       if (item.step === "TX_CONFIRMED" || item.step === "TX_CONFIRMED_AFTER_RETRY") setTxStatus("confirmed");
@@ -239,7 +233,6 @@ export default function DemoPage() {
       return;
     }
 
-    // Reset all state
     setLoading(true);
     setResult(null);
     setLogs([]);
@@ -252,7 +245,6 @@ export default function DemoPage() {
     logQueueRef.current = [];
     processingRef.current = false;
 
-    // Initial log
     const time = new Date().toLocaleTimeString([], { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
     setLogs([{ type: "info", message: "─── Sendra Reliability Layer Activated ───", time, id: Math.random() }]);
     await new Promise(r => setTimeout(r, 200));
@@ -264,7 +256,6 @@ export default function DemoPage() {
     try {
       const signer = { publicKey, signTransaction };
 
-      // Real-time logger callback — this is the key
       const realtimeLogger = (event: any) => {
         logQueueRef.current.push(event);
         processLogQueue();
@@ -276,7 +267,6 @@ export default function DemoPage() {
         { maxRetries: 3, logger: realtimeLogger }
       ) as any;
 
-      // Wait for remaining queued logs to finish rendering
       await new Promise(r => setTimeout(r, 500));
       while (logQueueRef.current.length > 0 || processingRef.current) {
         await new Promise(r => setTimeout(r, 100));
@@ -391,7 +381,6 @@ export default function DemoPage() {
     return `${b58.slice(0, 4)}..${b58.slice(-4)}`;
   }, [connected, publicKey]);
 
-  // Status label for the header
   const statusLabel = useMemo(() => {
     switch (txStatus) {
       case "idle": return { text: "Idle — Awaiting Transaction", color: "text-white/20", dot: "bg-white/10" };
@@ -754,11 +743,10 @@ export default function DemoPage() {
                                   <div className="w-1.5 h-1.5 rounded-full border border-white/15" />
                                 )}
                               </div>
-                              <span className={`text-[10px] font-mono font-bold tracking-wider flex-1 transition-colors duration-300 ${
-                                isActive ? "text-indigo-400" :
-                                isDone || isDoneAndFinished ? "text-white/45" :
-                                "text-white/15"
-                              }`}>{stage.label}</span>
+                              <span className={`text-[10px] font-mono font-bold tracking-wider flex-1 transition-colors duration-300 ${isActive ? "text-indigo-400" :
+                                  isDone || isDoneAndFinished ? "text-white/45" :
+                                    "text-white/15"
+                                }`}>{stage.label}</span>
                               <span className={`text-[8px] font-mono transition-colors duration-300 ${isActive ? "text-white/25" : isDone || isDoneAndFinished ? "text-white/12" : "text-white/8"}`}>
                                 {stage.desc}
                               </span>
@@ -777,18 +765,18 @@ export default function DemoPage() {
                         </div>
                         <div className="space-y-1.5">
                           <AnimatePresence initial={false}>
-                          {sdkLogs.map((log, idx) => (
-                            <motion.div key={log._ts + '-' + idx} initial={{ opacity: 0, x: -8, height: 0 }} animate={{ opacity: 1, x: 0, height: "auto" }} transition={{ duration: 0.25 }}
-                              className="p-2 rounded-lg bg-black/30 border border-white/[0.04] font-mono text-[10px] flex flex-col gap-0.5 overflow-hidden">
-                              <div className="flex items-center justify-between">
-                                <span className={`font-bold tracking-wider ${log.step.includes("RETRY") || log.step.includes("FAIL") ? "text-amber-400" : log.step.includes("SUCCESS") || log.step.includes("CONFIRM") ? "text-emerald-400" : "text-indigo-400"}`}>[{log.step}]</span>
-                                {log.attempt !== undefined && (<span className="text-white/15 text-[8px] px-1.5 py-0.5 rounded bg-white/5 border border-white/[0.06]">Attempt {log.attempt}</span>)}
-                              </div>
-                              {log.message && <span className="text-white/50">{log.message}</span>}
-                              {log.rpc && (<span className="text-white/20 text-[9px] truncate break-all">RPC: {log.rpc}</span>)}
-                              {log.fee !== undefined && (<span className="text-white/20 text-[9px]">Fee: {log.fee}</span>)}
-                            </motion.div>
-                          ))}
+                            {sdkLogs.map((log, idx) => (
+                              <motion.div key={log._ts + '-' + idx} initial={{ opacity: 0, x: -8, height: 0 }} animate={{ opacity: 1, x: 0, height: "auto" }} transition={{ duration: 0.25 }}
+                                className="p-2 rounded-lg bg-black/30 border border-white/[0.04] font-mono text-[10px] flex flex-col gap-0.5 overflow-hidden">
+                                <div className="flex items-center justify-between">
+                                  <span className={`font-bold tracking-wider ${log.step.includes("RETRY") || log.step.includes("FAIL") ? "text-amber-400" : log.step.includes("SUCCESS") || log.step.includes("CONFIRM") ? "text-emerald-400" : "text-indigo-400"}`}>[{log.step}]</span>
+                                  {log.attempt !== undefined && (<span className="text-white/15 text-[8px] px-1.5 py-0.5 rounded bg-white/5 border border-white/[0.06]">Attempt {log.attempt}</span>)}
+                                </div>
+                                {log.message && <span className="text-white/50">{log.message}</span>}
+                                {log.rpc && (<span className="text-white/20 text-[9px] truncate break-all">RPC: {log.rpc}</span>)}
+                                {log.fee !== undefined && (<span className="text-white/20 text-[9px]">Fee: {log.fee}</span>)}
+                              </motion.div>
+                            ))}
                           </AnimatePresence>
                         </div>
                       </div>

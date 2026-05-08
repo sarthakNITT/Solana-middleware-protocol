@@ -164,12 +164,9 @@ export function logEvent(
     logs?: LogEvent[],
     logger?: (log: LogEvent) => void
 ) {
-    // Always append to logs array if provided
     if (logs) logs.push(event);
 
-    // Always print formatted output to console — never skip this
     console.log(formatEventForConsole(event));
 
-    // Also call custom logger callback if provided (for dashboard UI streaming)
     if (logger) logger(event);
 }

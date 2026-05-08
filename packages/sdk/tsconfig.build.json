@@ -1,0 +1,26 @@
+{
+  "extends": "@repo/typescript-config/base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "rootDir": "src",
+    "declaration": true,
+    "declarationDir": "dist",
+    "emitDeclarationOnly": true,
+    "strictNullChecks": true,
+    "paths": {
+      "@repo/core": ["../core/src/index.ts"],
+      "@repo/types": ["../types/src/index.ts"],
+      "@repo/router": ["../router/src/index.ts"],
+      "@repo/simulator": ["../simulator/src/index.ts"],
+      "@repo/rpc-client": ["../rpc-client/src/index.ts"],
+      "@repo/tx-builder": ["../tx-builder/src/index.ts"],
+      "@repo/fee-optimizer": ["../fee-optimizer/src/index.ts"],
+      "@repo/logger": ["../logger/src/index.ts"],
+      "@repo/config": ["../config/src/index.ts"],
+      "@repo/retry-engine": ["../retry-engine/src/index.ts"],
+      "@repo/utils": ["../utils/src/index.ts"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
