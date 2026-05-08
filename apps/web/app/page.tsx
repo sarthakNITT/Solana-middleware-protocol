@@ -6,7 +6,7 @@ import Header from "./components/Header"
 import Hero from "./components/Hero";
 import { Problem } from "./components/Problem";
 import HowItWorks from "./components/HowItWorks";
-import Blog from "./components/Blog";
+import Features from "./components/Features";
 import { DemoTerminal } from "./components/DemoTerminal";
 import { FAQSection } from "./components/FAQ";
 import CTABanner from "./components/CTABanner";
@@ -30,7 +30,7 @@ export default function SendraPage() {
 
       <HowItWorks />
 
-      <Blog />
+      <Features />
 
       <DemoTerminal />
 

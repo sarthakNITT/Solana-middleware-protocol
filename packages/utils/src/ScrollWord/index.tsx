@@ -25,8 +25,8 @@ export function ScrollWord({ word, progress, start, end }: {
 
     return (
         <motion.span
-            style={{ opacity, color, filter: combinedFilter }}
-            className="text-[28px] md:text-[44px] font-light tracking-tight leading-tight"
+            style={{ opacity, color, filter: combinedFilter, fontSize: "55px", fontWeight: "400" }}
+            className="font-light tracking-tight leading-tight"
         >
             {word}{"\u00A0"}
         </motion.span>

@@ -14,7 +14,7 @@ export function ScrollLitText() {
     const n = words.length;
 
     return (
-        <section ref={ref} className="relative py-24 px-6 max-w-6xl mx-auto">
+        <section ref={ref} className="relative py-24 px-6 max-w-7xl mx-auto">
             <div className="text-center mb-12">
                 <div className="inline-flex items-center gap-2 text-[10px] font-mono text-white/20 uppercase tracking-[0.2em] border border-white/[0.06] px-3 py-1.5 rounded-full">
                     The problem
@@ -43,7 +43,7 @@ export function ScrollLitText() {
                             <path d="M18 6 6 18" /><path d="m6 6 12 12" />
                         </svg>
                     </div>
-                    <p className="text-[19px] leading-relaxed text-white/40 font-light tracking-wide pr-4">
+                    <p className="leading-relaxed text-white/40 font-light tracking-wide pr-4" style={{ fontSize: "24px" }}>
                         The gap in Solana infrastructure is that developers <span className="text-white/90">lose control over transactions</span> after sending them. Transactions get dropped suddenly due to fee spikes or network congestion, breaking the user experience.
                     </p>
                 </div>
@@ -56,7 +56,7 @@ export function ScrollLitText() {
                             <path d="M20 6 9 17l-5-5" />
                         </svg>
                     </div>
-                    <p className="text-[19px] leading-relaxed text-white/40 font-light tracking-wide pr-4">
+                    <p className="leading-relaxed text-white/40 font-light tracking-wide pr-4" style={{ fontSize: "24px" }}>
                         Sendra serves as a dedicated reliability layer to <span className="text-white/90">guarantee execution and return full control to developers</span>. It dynamically optimizes fees, routes past congested nodes, and handles retries automatically.
                     </p>
                 </div>
