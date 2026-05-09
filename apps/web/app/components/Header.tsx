@@ -16,19 +16,17 @@ export default function Header() {
                     <div className="flex flex-1">
                         <TiltLogo />
                     </div>
-                    <div className="hidden md:flex items-center justify-center gap-8 text-[13px] text-white/32">
+                    <div className="hidden md:flex items-center justify-center gap-8 text-[12px] text-white/40 font-mono uppercase tracking-wider">
                         {([["#how", "How it works"], ["#features", "Features"], ["#arch", "Architecture"], ["/demo", "Demo →"]] as [string, string][]).map(([href, label]) => (
                             href.startsWith("/") ? (
                                 <Link key={href} href={href}
-                                    className="relative hover:text-white/72 transition-colors duration-200 group">
+                                    className="hover:text-[#E8734A] transition-colors duration-200">
                                     {label}
-                                    <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-white/28 group-hover:w-full transition-all duration-300" />
                                 </Link>
                             ) : (
                                 <a key={href} href={href}
-                                    className="relative hover:text-white/72 transition-colors duration-200 group">
+                                    className="hover:text-[#E8734A] transition-colors duration-200">
                                     {label}
-                                    <span className="absolute -bottom-0.5 left-0 w-0 h-px bg-white/28 group-hover:w-full transition-all duration-300" />
                                 </a>
                             )
                         ))}

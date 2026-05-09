@@ -43,7 +43,7 @@ export function ScrollLitText() {
                             <path d="M18 6 6 18" /><path d="m6 6 12 12" />
                         </svg>
                     </div>
-                    <p className="leading-relaxed text-white/40 font-light tracking-wide pr-4" style={{ fontSize: "24px" }}>
+                    <p className="leading-relaxed text-white/40 font-light tracking-wide pr-4" style={{ fontSize: "20px" }}>
                         The gap in Solana infrastructure is that developers <span className="text-white/90">lose control over transactions</span> after sending them. Transactions get dropped suddenly due to fee spikes or network congestion, breaking the user experience.
                     </p>
                 </div>
@@ -56,7 +56,7 @@ export function ScrollLitText() {
                             <path d="M20 6 9 17l-5-5" />
                         </svg>
                     </div>
-                    <p className="leading-relaxed text-white/40 font-light tracking-wide pr-4" style={{ fontSize: "24px" }}>
+                    <p className="leading-relaxed text-white/40 font-light tracking-wide pr-4" style={{ fontSize: "20px" }}>
                         Sendra serves as a dedicated reliability layer to <span className="text-white/90">guarantee execution and return full control to developers</span>. It dynamically optimizes fees, routes past congested nodes, and handles retries automatically.
                     </p>
                 </div>
