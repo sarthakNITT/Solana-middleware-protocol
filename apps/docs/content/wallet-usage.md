@@ -6,6 +6,7 @@ Sendra is natively compatible with the official `@solana/wallet-adapter-react`.
 
 ```typescript
 import { useWallet } from "@solana/wallet-adapter-react";
+import { SendWithReliability } from "sendra-tx";
 
 const { publicKey, signTransaction } = useWallet();
 

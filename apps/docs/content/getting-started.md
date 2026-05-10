@@ -25,7 +25,7 @@ Sendra is designed to be lightweight and zero-dependency beyond the standard Sol
 
 ```bash
 # Core SDK and peer dependencies
-npm install @sendra/sdk @solana/web3.js
+npm install sendra-tx @solana/web3.js
 ```
 
 ### Initializing a Reliable Execution
@@ -33,7 +33,7 @@ npm install @sendra/sdk @solana/web3.js
 The entry point for all reliability operations is the `SendWithReliability` function. It replaces the standard `connection.sendTransaction` and `connection.confirmTransaction` sequence with a single, resilient promise.
 
 ```typescript
-import { SendWithReliability } from "@sendra/sdk";
+import { SendWithReliability } from "sendra-tx";
 import { SystemProgram, TransactionInstruction, PublicKey } from "@solana/web3.js";
 
 async function executePayment(sender: PublicKey, receiver: PublicKey, lamports: number) {

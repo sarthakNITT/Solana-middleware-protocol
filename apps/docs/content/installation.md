@@ -2,14 +2,13 @@ Sendra is distributed as a modular package via NPM. This page details the instal
 
 ## Package Installation
 
-The core SDK is published under the `@sendra/sdk` namespace. You should also ensure you have the required Solana peer dependencies installed in your project.
-
+The core SDK is published under the `sendra-tx` namespace. You should also ensure you have the required Solana peer dependencies installed in your project.
 ```bash
 [multi]
-pnpm add @sendra/sdk @solana/web3.js
-npm install @sendra/sdk @solana/web3.js
-yarn add @sendra/sdk @solana/web3.js
-bun add @sendra/sdk @solana/web3.js
+pnpm add sendra-tx @solana/web3.js
+npm install sendra-tx @solana/web3.js
+yarn add sendra-tx @solana/web3.js
+bun add sendra-tx @solana/web3.js
 ```
 
 ## Peer Dependencies

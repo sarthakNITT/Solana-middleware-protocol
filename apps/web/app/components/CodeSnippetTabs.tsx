@@ -35,7 +35,7 @@ const TABS: Tab[] = [
     label: "Rust",
     lang: "rust",
     dot: "#dea584",
-    code: `use sendra_sdk::{SendWithReliability, SendraParams, SendraOptions, Signer as SendraSigner};
+    code: `use sendra_tx::{SendWithReliability, SendraParams, SendraOptions, Signer as SendraSigner};
 use solana_sdk::{signature::{Keypair, Signer}, pubkey::Pubkey};
 use solana_transaction::versioned::VersionedTransaction;
 
@@ -67,7 +67,7 @@ async fn main() {
     label: "TypeScript",
     lang: "typescript",
     dot: "#3178c6",
-    code: `import { SendWithReliability } from "@sendra/sdk";
+    code: `import { SendWithReliability } from "sendra-tx";
 import { Keypair } from "@solana/web3.js";
 
 const signer = Keypair.generate();
@@ -93,7 +93,7 @@ await SendWithReliability(
     label: "Python",
     lang: "python",
     dot: "#3572A5",
-    code: `from sendra_sdk import SendWithReliability, SendraParams, SendraOptions, Signer
+    code: `from sendra_tx import SendWithReliability, SendraParams, SendraOptions, Signer
 from solders.keypair import Keypair
 from solders.pubkey import Pubkey
 from solders.transaction import VersionedTransaction
@@ -122,7 +122,7 @@ SendWithReliability(params, signer, options)`,
     dot: "#89e051",
     code: `package main
 import (
-	sendra "github.com/sendra/sdk"
+	sendra "github.com/sendra/sendra-tx"
 	"github.com/gagliardetto/solana-go"
 )
 

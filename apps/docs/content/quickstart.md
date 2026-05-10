@@ -14,10 +14,10 @@ First, install the Sendra SDK into your project.
 
 ```bash
 [multi]
-pnpm add @sendra/sdk @solana/web3.js
-npm install @sendra/sdk @solana/web3.js
-yarn add @sendra/sdk @solana/web3.js
-bun add @sendra/sdk @solana/web3.js
+pnpm add sendra-tx @solana/web3.js
+npm install sendra-tx @solana/web3.js
+yarn add sendra-tx @solana/web3.js
+bun add sendra-tx @solana/web3.js
 ```
 
 In your application, you will need to provide at least one RPC URL. Sendra's Dynamic Router works best when given multiple providers to benchmark against.
@@ -53,7 +53,7 @@ const instructions = [
 Now, pass your instructions to `SendWithReliability`. Sendra will automatically handle the simulation, fee optimization, and re-signing logic.
 
 ```typescript
-import { SendWithReliability } from "@sendra/sdk";
+import { SendWithReliability } from "sendra-tx";
 
 const result = await SendWithReliability(
   {

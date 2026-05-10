@@ -1,5 +1,7 @@
 # Sendra
 
+[![npm package](https://img.shields.io/npm/v/sendra-tx.svg?logo=npm&logoColor=fff&label=npm&color=limegreen)](https://www.npmjs.com/package/sendra-tx)
+
 Transactions that don’t fail.
 
 Reliable transaction execution layer for Solana.
@@ -131,8 +133,8 @@ With Sendra:
 ## ⚡ Quick Start
 
 ```ts
-import { sendWithReliability } from "sendra";
-const result = await sendWithReliability(
+import { SendWithReliability } from "sendra-tx";
+const result = await SendWithReliability(
   {
     receiver: "RECEIVER_PUBLIC_KEY",
     amount: 1000,
@@ -150,7 +152,7 @@ That’s it — Sendra handles routing, retries, and optimization automatically.
 ## 📦 Installation
 
 ```bash
-npm install sendra
+npm install sendra-tx @solana/web3.js
 ```
 
 ---
@@ -158,9 +160,9 @@ npm install sendra
 ## ⚙️ Usage
 
 ```ts
-import { sendWithReliability } from "sendra";
+import { SendWithReliability } from "sendra-tx";
 
-const result = await sendWithReliability(
+const result = await SendWithReliability(
   {
     receiver: "RECEIVER_PUBLIC_KEY",
     amount: 1000,
@@ -174,7 +176,7 @@ console.log(result);
 
 ### Using Pre-built Transactions (Swap, Mint, etc.)
 ```ts
-const result = await sendWithReliability(
+const result = await SendWithReliability(
   {
     type: "built",
     serializedTx: false,
@@ -190,6 +192,10 @@ Works with swaps, minting, and any program interactions.
 ---
 
 ## 🔍 Real Transaction Proof
+
+> [!NOTE]
+> **Execution Simulation / CLI Output**
+> ![Sendra Execution Output](https://via.placeholder.com/800x400.png?text=Terminal+Execution+GIF+Placeholder)
 
 Tested on Solana Devnet with successful executions using Sendra.
 
@@ -336,9 +342,9 @@ packages/
 ### Setup
 
 ```bash
-git clone <repo>
-cd sendra
-npm install
+git clone https://github.com/sarthakNITT/Solana-middleware-protocol
+cd Solana-middleware-protocol
+bun install
 ```
 
 ### Run locally

@@ -744,8 +744,8 @@ export default function DemoPage() {
                                 )}
                               </div>
                               <span className={`text-[10px] font-mono font-bold tracking-wider flex-1 transition-colors duration-300 ${isActive ? "text-indigo-400" :
-                                  isDone || isDoneAndFinished ? "text-white/45" :
-                                    "text-white/15"
+                                isDone || isDoneAndFinished ? "text-white/45" :
+                                  "text-white/15"
                                 }`}>{stage.label}</span>
                               <span className={`text-[8px] font-mono transition-colors duration-300 ${isActive ? "text-white/25" : isDone || isDoneAndFinished ? "text-white/12" : "text-white/8"}`}>
                                 {stage.desc}
@@ -806,7 +806,7 @@ export default function DemoPage() {
                     <div className="p-5 rounded-xl border border-white/[0.06]" style={{ background: "rgba(255,255,255,0.03)" }}>
                       <div className="text-[11px] font-mono text-white/40 uppercase tracking-wider mb-3 font-bold">01 — Install</div>
                       <div className="rounded-lg px-4 py-3 text-[12px] font-mono text-white/60 border border-white/[0.06] select-all" style={{ background: "rgba(0,0,0,0.3)" }}>
-                        npm install @sendra/sdk
+                        npm install sendra-tx
                       </div>
                       <p className="text-[10px] font-mono text-white/20 mt-3 leading-relaxed">Works with any Solana project. Compatible with @solana/web3.js v1.x and v2.x.</p>
                     </div>
@@ -814,7 +814,7 @@ export default function DemoPage() {
                       <div className="text-[11px] font-mono text-white/40 uppercase tracking-wider mb-3 font-bold">02 — Import</div>
                       <div className="rounded-lg px-4 py-3 text-[12px] font-mono text-white/50 border border-white/[0.06] space-y-0.5" style={{ background: "rgba(0,0,0,0.3)" }}>
                         <div><span className="text-white/30">import</span> {"{ "}<span className="text-white/70">SendWithReliability</span>{" }"}</div>
-                        <div><span className="text-white/30">from</span> <span className="text-white/50">"@sendra/sdk"</span></div>
+                        <div><span className="text-white/30">from</span> <span className="text-white/50">"sendra-tx"</span></div>
                       </div>
                     </div>
                     <div className="p-5 rounded-xl border border-white/[0.06] lg:col-span-2" style={{ background: "rgba(255,255,255,0.03)" }}>
