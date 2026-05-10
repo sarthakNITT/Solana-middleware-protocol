@@ -7,7 +7,7 @@ export function ScrollLitText() {
 
     const { scrollYProgress } = useScroll({
         target: ref,
-        offset: ["start 85%", "start -10%"],
+        offset: ["start 70%", "start 15%"],
     });
 
     const words = "Most transactions fail silently. Users retry. Developers guess. Traditional infrastructure leaves execution unpredictable. Sendra fixes execution at the protocol layer ensuring transactions land reliably, every time.".split(" ");

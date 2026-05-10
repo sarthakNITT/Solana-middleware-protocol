@@ -7,7 +7,7 @@ export function FAQSection() {
     const [openIndex, setOpenIndex] = useState<number | null>(null);
 
     return (
-        <section className="relative z-10">
+        <section id="faq" className="relative z-10">
             <Divider />
             <div className="max-w-4xl mx-auto px-6 py-24">
                 <h2 className="text-3xl md:text-[42px] font-light text-white text-center mb-16 tracking-tight">

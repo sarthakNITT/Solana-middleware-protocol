@@ -17,7 +17,7 @@ export default function Header() {
                         <TiltLogo />
                     </div>
                     <div className="hidden md:flex items-center justify-center gap-8 text-[12px] text-white/40 font-mono uppercase tracking-wider">
-                        {([["#how", "How it works"], ["#features", "Features"], ["#arch", "Architecture"], ["/demo", "Demo →"]] as [string, string][]).map(([href, label]) => (
+                        {([["#problem", "Problem"], ["#how", "How it works"], ["#features", "Features"], ["#simulation", "Simulation"], ["#faq", "FAQ"]] as [string, string][]).map(([href, label]) => (
                             href.startsWith("/") ? (
                                 <Link key={href} href={href}
                                     className="hover:text-[#E8734A] transition-colors duration-200">

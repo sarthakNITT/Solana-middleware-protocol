@@ -48,7 +48,7 @@ export function DemoTerminal() {
     };
 
     return (
-        <section ref={ref} className="py-24 px-6">
+        <section id="simulation" ref={ref} className="py-24 px-6">
             <div className="max-w-3xl mx-auto">
                 <div className="text-center mb-12">
                     <div className="text-[10px] font-mono text-white/22 uppercase tracking-[0.2em] mb-3">Execution Simulation</div>

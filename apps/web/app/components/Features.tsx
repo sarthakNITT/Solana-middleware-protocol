@@ -3,21 +3,26 @@
 import { Divider } from "@repo/utils";
 import { motion } from "framer-motion";
 
-function ArchNode({ label, x, y, w = 140, accent = false }: { label: string; x: number; y: number; w?: number; accent?: boolean }) {
+function ArchNode({ label, cx, cy, w = 140, accent = false }: { label: string; cx: number; cy: number; w?: number; accent?: boolean }) {
+    const x = cx - w / 2;
+    const y = cy - 20;
     return (
         <g>
             <rect
-                x={x} y={y} width={w} height={38} rx={8}
-                fill={accent ? "rgba(232,115,74,0.12)" : "rgba(255,255,255,0.05)"}
-                stroke={accent ? "rgba(232,115,74,0.4)" : "rgba(255,255,255,0.12)"}
+                x={x} y={y} width={w} height={40} rx={10}
+                fill={accent ? "rgba(232,115,74,0.08)" : "rgba(20,20,25,0.65)"}
+                stroke={accent ? "rgba(232,115,74,0.5)" : "rgba(255,255,255,0.12)"}
                 strokeWidth={1}
+                style={{ backdropFilter: "blur(4px)" }}
             />
             <text
-                x={x + w / 2} y={y + 23}
+                x={cx} y={cy + 4}
                 textAnchor="middle"
-                fill={accent ? "#E8734A" : "rgba(255,255,255,0.7)"}
-                fontSize={11}
+                fill={accent ? "#E8734A" : "rgba(255,255,255,0.75)"}
+                fontSize={12}
                 fontFamily="monospace"
+                fontWeight={accent ? 600 : 400}
+                letterSpacing={0.5}
             >
                 {label}
             </text>
@@ -26,52 +31,54 @@ function ArchNode({ label, x, y, w = 140, accent = false }: { label: string; x: 
 }
 
 function ConnLine({ x1, y1, x2, y2 }: { x1: number; y1: number; x2: number; y2: number }) {
+    const midY = y1 + (y2 - y1) / 2;
     return (
-        <line
-            x1={x1} y1={y1} x2={x2} y2={y2}
-            stroke="rgba(255,255,255,0.08)"
-            strokeWidth={1}
-            strokeDasharray="4 3"
+        <path
+            d={`M ${x1} ${y1} C ${x1} ${midY}, ${x2} ${midY}, ${x2} ${y2}`}
+            stroke="rgba(255,255,255,0.15)"
+            strokeWidth={1.5}
+            strokeDasharray="4 4"
+            fill="none"
         />
     );
 }
 
 function ArchitectureDiagram() {
     return (
-        <svg viewBox="0 0 600 380" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: "100%" }}>
-            <ConnLine x1={300} y1={48} x2={300} y2={72} />
-            <ConnLine x1={300} y1={110} x2={180} y2={145} />
-            <ConnLine x1={300} y1={110} x2={300} y2={145} />
-            <ConnLine x1={300} y1={110} x2={420} y2={145} />
-            <ConnLine x1={180} y1={183} x2={120} y2={218} />
-            <ConnLine x1={180} y1={183} x2={240} y2={218} />
-            <ConnLine x1={300} y1={183} x2={360} y2={218} />
-            <ConnLine x1={420} y1={183} x2={480} y2={218} />
-            <ConnLine x1={120} y1={256} x2={180} y2={290} />
-            <ConnLine x1={240} y1={256} x2={180} y2={290} />
-            <ConnLine x1={360} y1={256} x2={420} y2={290} />
-            <ConnLine x1={480} y1={256} x2={420} y2={290} />
-            <ConnLine x1={300} y1={328} x2={300} y2={348} />
+        <svg viewBox="0 0 800 380" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", height: "100%", padding: "10px 0" }}>
+            <ConnLine x1={400} y1={40} x2={400} y2={65} />
+            <ConnLine x1={400} y1={105} x2={200} y2={130} />
+            <ConnLine x1={400} y1={105} x2={400} y2={130} />
+            <ConnLine x1={400} y1={105} x2={600} y2={130} />
+            <ConnLine x1={200} y1={170} x2={145} y2={195} />
+            <ConnLine x1={200} y1={170} x2={315} y2={195} />
+            <ConnLine x1={400} y1={170} x2={485} y2={195} />
+            <ConnLine x1={600} y1={170} x2={655} y2={195} />
+            <ConnLine x1={145} y1={235} x2={280} y2={260} />
+            <ConnLine x1={315} y1={235} x2={280} y2={260} />
+            <ConnLine x1={485} y1={235} x2={520} y2={260} />
+            <ConnLine x1={655} y1={235} x2={520} y2={260} />
+            <ConnLine x1={280} y1={300} x2={400} y2={325} />
+            <ConnLine x1={520} y1={300} x2={400} y2={325} />
 
-            <ArchNode label="@repo/sdk" x={230} y={20} accent />
+            <ArchNode label="@repo/sdk" cx={400} cy={20} w={130} accent />
+            <ArchNode label="@repo/core" cx={400} cy={85} w={130} accent />
 
-            <ArchNode label="@repo/core" x={230} y={72} accent />
+            <ArchNode label="@repo/logger" cx={200} cy={150} w={130} />
+            <ArchNode label="@repo/fee-optimizer" cx={400} cy={150} w={165} />
+            <ArchNode label="@repo/retry-engine" cx={600} cy={150} w={155} />
 
-            <ArchNode label="@repo/logger" x={110} y={145} />
-            <ArchNode label="@repo/fee-optimizer" x={250} y={145} w={100} />
-            <ArchNode label="@repo/retry-engine" x={370} y={145} w={120} />
+            <ArchNode label="@repo/simulator" cx={145} cy={215} w={140} />
+            <ArchNode label="@repo/router" cx={315} cy={215} w={130} />
+            <ArchNode label="@repo/tx-builder" cx={485} cy={215} w={145} />
+            <ArchNode label="@repo/rpc-client" cx={655} cy={215} w={140} />
 
-            <ArchNode label="@repo/simulator" x={50} y={218} />
-            <ArchNode label="@repo/router" x={200} y={218} w={100} />
-            <ArchNode label="@repo/tx-builder" x={320} y={218} w={110} />
-            <ArchNode label="@repo/rpc-client" x={450} y={218} w={110} />
+            <ArchNode label="@repo/types" cx={280} cy={280} w={130} />
+            <ArchNode label="@repo/config" cx={520} cy={280} w={130} />
 
-            <ArchNode label="@repo/types" x={110} y={290} />
-            <ArchNode label="@repo/config" x={350} y={290} />
+            <ArchNode label="@solana/web3.js" cx={400} cy={345} w={160} accent />
 
-            <ArchNode label="@solana/web3.js" x={230} y={348} w={140} accent />
-
-            <circle cx={300} cy={200} r={160} fill="url(#glow)" opacity={0.15} />
+            <circle cx={400} cy={200} r={220} fill="url(#glow)" opacity={0.12} />
             <defs>
                 <radialGradient id="glow">
                     <stop offset="0%" stopColor="#E8734A" />
@@ -107,24 +114,34 @@ function FeatureCard({ title, desc, icon, delay = 0 }: { title: string; desc: st
             transition={{ duration: 0.5, delay }}
             style={{
                 border: "1px solid rgba(255,255,255,0.07)",
-                background: "linear-gradient(160deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.008) 100%)",
                 borderRadius: 16,
-                padding: "32px 28px",
+                position: "relative",
+                overflow: "hidden",
                 display: "flex",
                 flexDirection: "column",
-                gap: 12,
             }}
         >
-            <div style={{
-                width: 44, height: 44, borderRadius: 10,
-                border: "1px solid rgba(255,255,255,0.08)",
-                background: "rgba(255,255,255,0.03)",
-                display: "flex", alignItems: "center", justifyContent: "center",
-            }}>
-                {icon}
+            <div className="absolute inset-0">
+                <img
+                    src="/hero_bg.jpg"
+                    alt=""
+                    className="w-full h-full object-cover"
+                    style={{ filter: "blur(30px) brightness(0.5) saturate(0.7)" }}
+                />
+                <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.25)" }} />
             </div>
-            <h3 style={{ fontSize: 18, fontWeight: 600, color: "#fff", margin: 0 }}>{title}</h3>
-            <p style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.4)", margin: 0 }}>{desc}</p>
+            <div style={{ position: "relative", zIndex: 1, padding: "32px 28px", display: "flex", flexDirection: "column", gap: 12 }}>
+                <div style={{
+                    width: 44, height: 44, borderRadius: 10,
+                    border: "1px solid rgba(255,255,255,0.08)",
+                    background: "rgba(255,255,255,0.03)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                    {icon}
+                </div>
+                <h3 style={{ fontSize: 18, fontWeight: 600, color: "#fff", margin: 0 }}>{title}</h3>
+                <p style={{ fontSize: 14, lineHeight: 1.7, color: "rgba(255,255,255,0.4)", margin: 0 }}>{desc}</p>
+            </div>
         </motion.div>
     );
 }
@@ -150,7 +167,7 @@ const icons = {
 export default function Features() {
     return (
         <>
-            <section className="relative z-10">
+            <section id="features" className="relative z-10">
                 <Divider />
                 <div style={{ maxWidth: 1280, margin: "0 auto", padding: "96px 24px" }}>
                     <div style={{ marginBottom: 56 }}>
@@ -182,11 +199,19 @@ export default function Features() {
                                 border: "1px solid rgba(255,255,255,0.07)",
                                 borderRadius: 16,
                                 overflow: "hidden",
-                                background: "linear-gradient(160deg, rgba(255,255,255,0.035) 0%, rgba(255,255,255,0.005) 100%)",
                                 position: "relative",
                             }}
                         >
-                            <div style={{ padding: "28px 28px 0" }}>
+                            <div className="absolute inset-0">
+                                <img
+                                    src="/hero_bg.jpg"
+                                    alt=""
+                                    className="w-full h-full object-cover"
+                                    style={{ filter: "blur(30px) brightness(0.5) saturate(0.7)" }}
+                                />
+                                <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.25)" }} />
+                            </div>
+                            <div style={{ padding: "28px 28px 0", position: "relative", zIndex: 1 }}>
                                 <h3 style={{ fontSize: 22, fontWeight: 600, color: "#fff", margin: "0 0 8px" }}>
                                     Modular Architecture
                                 </h3>
@@ -194,12 +219,7 @@ export default function Features() {
                                     Every component is a separate package — swap, extend, or replace any layer without touching the rest. Built as a true monorepo with clean dependency boundaries.
                                 </p>
                             </div>
-                            <div style={{ padding: "20px 16px 0", position: "relative" }}>
-                                <div style={{
-                                    position: "absolute", inset: 0,
-                                    background: "radial-gradient(ellipse at 50% 80%, rgba(232,115,74,0.06) 0%, transparent 70%)",
-                                    pointerEvents: "none",
-                                }} />
+                            <div style={{ padding: "20px 16px 0", position: "relative", zIndex: 1 }}>
                                 <ArchitectureDiagram />
                             </div>
                         </motion.div>
@@ -218,17 +238,15 @@ export default function Features() {
                                 flexDirection: "column",
                             }}
                         >
-                            <div style={{
-                                position: "absolute", inset: 0,
-                                backgroundImage: "url(/hero_bg.jpg)",
-                                backgroundSize: "cover",
-                                backgroundPosition: "center",
-                                filter: "brightness(0.3) saturate(0.6)",
-                            }} />
-                            <div style={{
-                                position: "absolute", inset: 0,
-                                background: "linear-gradient(180deg, rgba(6,6,10,0.85) 0%, rgba(6,6,10,0.5) 50%, rgba(6,6,10,0.9) 100%)",
-                            }} />
+                            <div className="absolute inset-0">
+                                <img
+                                    src="/hero_bg.jpg"
+                                    alt=""
+                                    className="w-full h-full object-cover"
+                                    style={{ filter: "blur(30px) brightness(0.5) saturate(0.7)" }}
+                                />
+                                <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.25)" }} />
+                            </div>
 
                             <div style={{ position: "relative", zIndex: 1, padding: "28px 28px 0", flex: "0 0 auto" }}>
                                 <div style={{ marginBottom: 16 }}>
