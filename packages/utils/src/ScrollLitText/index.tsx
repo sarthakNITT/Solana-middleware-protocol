@@ -10,7 +10,7 @@ export function ScrollLitText() {
         offset: ["start 70%", "start 15%"],
     });
 
-    const words = "Most transactions fail silently. Users retry. Developers guess. Traditional infrastructure leaves execution unpredictable. Sendra fixes execution at the protocol layer ensuring transactions land reliably, every time.".split(" ");
+    const words = "Most transactions fail silently. Users retry. Developers guess. Traditional infrastructure leaves execution unpredictable. Sendra fixes execution at the protocol layer ensuring transactions land reliably, every time. <br> Built for real world Solana conditions where speed matters, congestion happens, and failed transactions cost users money.".split(" ");
     const n = words.length;
 
     return (
@@ -22,6 +22,9 @@ export function ScrollLitText() {
             </div>
             <div className="flex flex-wrap gap-x-[14px] gap-y-3 justify-center mb-16">
                 {words.map((word, i) => {
+                    if (word === "<br>") {
+                        return <div key={`br-${i}`} className="w-full h-8 md:h-14" />;
+                    }
 
                     const BAND_START = 0.0;
                     const BAND_END = 1.0;

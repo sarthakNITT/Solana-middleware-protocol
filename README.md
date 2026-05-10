@@ -6,24 +6,44 @@ Transactions that don’t fail.
 
 Reliable transaction execution layer for Solana.
 
+![Sendra Dashboard](./apps/web/public/dashboard.png)
+
 ---
 
-## 🚀 What is Sendra?
+## Quick Links
+
+- [npm package](https://www.npmjs.com/package/sendra-tx)
+- [Docs Website]<!-- Add docs URL -->
+- [GitHub Repo]<!-- Add GitHub URL -->
+- [Dashboard Demo Video]<!-- Add dashboard demo video URL -->
+- [SDK Demo Video]<!-- Add SDK demo video URL -->
+
+---
+
+## Installation
+
+```bash
+npm install sendra-tx @solana/web3.js
+```
+
+---
+
+## What is Sendra?
 
 Sendra is a developer-focused SDK that ensures Solana transactions are executed reliably. Instead of just sending a transaction and hoping it lands, Sendra manages the full lifecycle — from construction to confirmation — handling failures, retries, and network issues automatically.
 
 ---
 
-## ⚡ Why not build this yourself?
+## Why not build this yourself?
 
 You can build parts of this yourself — retry logic, RPC fallback, fee tuning.
 
 But in production, reliability is not one problem — it’s multiple interacting problems:
 
-* dynamic network conditions
-* RPC instability
-* fee competitiveness
-* blockhash expiry timing
+- dynamic network conditions
+- RPC instability
+- fee competitiveness
+- blockhash expiry timing
 
 Handling all of this together, consistently, is complex and error-prone.
 
@@ -31,38 +51,38 @@ Sendra provides this as a single, reliable execution layer — so you don’t ha
 
 ---
 
-## ❗ Problem
+## Problem
 
 Solana transactions often fail due to:
 
-- RPC node failures or latency  
-- Network congestion  
-- Incorrect or insufficient priority fees  
-- Stale blockhashes  
+- RPC node failures or latency
+- Network congestion
+- Incorrect or insufficient priority fees
+- Stale blockhashes
 
 Developers typically need to build their own:
 
-- Retry logic  
-- RPC failover systems  
-- Fee estimation mechanisms  
-- Monitoring loops  
+- Retry logic
+- RPC failover systems
+- Fee estimation mechanisms
+- Monitoring loops
 
 This is complex, error-prone, and repetitive.
 
 ---
 
-## 👥 Who is this for?
+## Who is this for?
 
-* dApp developers (DeFi, NFTs, payments)
-* Trading bots and automation systems
-* Backend services interacting with Solana
-* Any system where transaction reliability matters
+- dApp developers (DeFi, NFTs, payments)
+- Trading bots and automation systems
+- Backend services interacting with Solana
+- Any system where transaction reliability matters
 
 If your application depends on transactions landing successfully, Sendra is built for you.
 
 ---
 
-## 🧠 When should you use Sendra?
+## When should you use Sendra?
 
 Use Sendra when:
 - your transactions fail intermittently
@@ -74,47 +94,47 @@ If reliability matters, Sendra should be part of your stack.
 
 ---
 
-## ✅ Solution
+## Solution
 
 Sendra provides a single SDK function that handles everything:
 
-- Smart RPC routing (fastest node selection)  
-- Dynamic fee optimization  
-- Pre-flight simulation  
-- Automatic retries with fresh blockhash  
-- Transaction monitoring and confirmation  
+- Smart RPC routing (fastest node selection)
+- Dynamic fee optimization
+- Pre-flight simulation
+- Automatic retries with fresh blockhash
+- Transaction monitoring and confirmation
 
-👉 Instead of:
-```
+Instead of:
+```text
 write custom retry + routing + fee logic
 ```
 
-👉 You just do:
-```
+You just do:
+```typescript
 sendWithReliability(...)
 ```
 
 ---
 
-## 💡 Example Use Case
+## Example Use Case
 
 A user clicks “Swap” in your dApp.
 
 Without Sendra:
 
-* Transaction may fail silently
-* You need manual retries
-* Users get poor experience
+- Transaction may fail silently
+- You need manual retries
+- Users get poor experience
 
 With Sendra:
 
-* Transaction is simulated before sending
-* If it fails, it retries with better conditions
-* User gets a confirmed transaction without manual intervention
+- Transaction is simulated before sending
+- If it fails, it retries with better conditions
+- User gets a confirmed transaction without manual intervention
 
 ---
 
-## ⚔️ Without vs With Sendra
+## Without vs With Sendra
 
 Without Sendra:
 - Fire-and-forget transaction
@@ -130,10 +150,11 @@ With Sendra:
 
 ---
 
-## ⚡ Quick Start
+## Quick Start
 
-```ts
+```typescript
 import { SendWithReliability } from "sendra-tx";
+
 const result = await SendWithReliability(
   {
     receiver: "RECEIVER_PUBLIC_KEY",
@@ -142,6 +163,7 @@ const result = await SendWithReliability(
   signer,
   { maxRetries: 3 }
 );
+
 console.log(result.signature);
 ```
 
@@ -149,17 +171,9 @@ That’s it — Sendra handles routing, retries, and optimization automatically.
 
 ---
 
-## 📦 Installation
+## Usage
 
-```bash
-npm install sendra-tx @solana/web3.js
-```
-
----
-
-## ⚙️ Usage
-
-```ts
+```typescript
 import { SendWithReliability } from "sendra-tx";
 
 const result = await SendWithReliability(
@@ -175,7 +189,8 @@ console.log(result);
 ```
 
 ### Using Pre-built Transactions (Swap, Mint, etc.)
-```ts
+
+```typescript
 const result = await SendWithReliability(
   {
     type: "built",
@@ -191,11 +206,12 @@ Works with swaps, minting, and any program interactions.
 
 ---
 
-## 🔍 Real Transaction Proof
+## Real Transaction Proof
 
 > [!NOTE]
 > **Execution Simulation / CLI Output**
-> ![Sendra Execution Output](https://via.placeholder.com/800x400.png?text=Terminal+Execution+GIF+Placeholder)
+
+![Sendra SDK Execution Logs](./apps/web/public/sdkLogs.png)
 
 Tested on Solana Devnet with successful executions using Sendra.
 
@@ -210,23 +226,25 @@ Sendra handled:
 - **Retry on failure**
 - **Final confirmation**
 
-This is real transaction executed using the SDK (not simulated logs).
+This is a real transaction executed using the SDK (not simulated logs).
 These transactions were executed under real network conditions including RPC variability and congestion.
 
 ---
 
-## 📊 Execution Metrics
+## Execution Metrics
+
 In our test transactions:
-* Attempts: 1–2 (with retry when needed)
-* Confirmation time: ~2–6 seconds
-* Success rate: improved under unstable network conditions
+- Attempts: 1–2 (with retry when needed)
+- Confirmation time: ~2–6 seconds
+- Improved transaction reliability under unstable network conditions
+
 Comparison:
 - Normal transaction: may fail or get dropped under congestion
 - Sendra: adapts (retry + fee + RPC switch) and lands successfully
 
 ---
 
-## 🔑 Signer
+## Signer
 
 Sendra requires a signer to sign transactions.
 
@@ -234,7 +252,7 @@ Sendra requires a signer to sign transactions.
 
 Works directly with Phantom, Solflare, Backpack, etc.
 
-```ts
+```typescript
 const signer = wallet;
 ```
 
@@ -242,7 +260,7 @@ const signer = wallet;
 
 ### Backend Keypair
 
-```ts
+```typescript
 const signer = {
   publicKey: keypair.publicKey,
   signTransaction: async (tx) => {
@@ -254,46 +272,50 @@ const signer = {
 
 ---
 
-## 🔄 How it Works
+## How it Works
 
-1. Select fastest RPC  
-2. Build transaction  
-3. Optimize priority fee  
-4. Simulate transaction  
-5. Sign transaction  
-6. Send to network  
-7. Monitor confirmation  
-8. Retry with new blockhash if needed  
+1. Select fastest RPC
+2. Build transaction
+3. Optimize priority fee
+4. Simulate transaction
+5. Sign transaction
+6. Send to network
+7. Monitor confirmation
+8. Retry with new blockhash if needed
 
 ---
 
-## 🧱 Architecture
+## Architecture Diagram
+
+![Sendra Architecture Diagram](./apps/web/public/archi.png)
+
+## Architecture
 
 Sendra is built as a modular execution pipeline:
 
-* Router → selects best RPC
-* Tx Builder → constructs or rebuilds transactions
-* Fee Optimizer → sets competitive priority fee
-* Simulator → checks for failures before sending
-* RPC Client → broadcasts transaction
-* Logger → tracks status and retries
+- Router → selects best RPC
+- Tx Builder → constructs or rebuilds transactions
+- Fee Optimizer → sets competitive priority fee
+- Simulator → checks for failures before sending
+- RPC Client → broadcasts transaction
+- Logger → tracks status and retries
 
 All components work together to ensure reliable execution.
 
 ---
 
-## ✨ Features
+## Features
 
-- Smart RPC failover  
-- Dynamic fee optimization  
-- Pre-flight simulation  
-- Automatic retry engine  
-- Transaction confirmation monitoring  
-- Modular architecture  
+- Smart RPC failover
+- Dynamic fee optimization
+- Pre-flight simulation
+- Automatic retry engine
+- Transaction confirmation monitoring
+- Modular architecture
 
 ---
 
-## 📊 Response Format
+## Response Format
 
 ```json
 {
@@ -305,26 +327,27 @@ All components work together to ensure reliable execution.
 
 ---
 
-## 🧪 Demo
+## Demo
 
 Run a demo script:
 
 ```bash
 bun run demo.ts
 ```
+
 ---
 
-## 🚀 Try it now
+## Try it now
 
 Integrate Sendra in your project and test it under real network conditions.
 
-If you're building on Solana, this can immediately improve your transaction success rate.
+If you're building on Solana, this can immediately improve your transaction reliability.
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
-```
+```text
 packages/
   sdk/            # Public SDK entry
   core/           # Orchestration logic
@@ -337,7 +360,7 @@ packages/
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 ### Setup
 
@@ -355,28 +378,29 @@ npm run dev
 
 ### Guidelines
 
-- Keep packages modular  
-- Avoid tight coupling between packages  
-- Add shared types in `@repo/types`  
-- Write reusable functions  
-- Test flows before submitting PR  
+- Keep packages modular
+- Avoid tight coupling between packages
+- Add shared types in `@repo/types`
+- Write reusable functions
+- Test flows before submitting PR
 
 ---
 
-## ⚠️ Current Status
+## Current Status
+
 - Optimized for standard transactions via params input
 - Supports pre-built transactions (swap, mint, etc.)
 - Native support for all transaction types is actively expanding
 
 ---
 
-## 💡 Vision
+## Vision
 
 Sendra aims to become the execution layer for Solana — ensuring every transaction is not just sent, but successfully landed.
 
 ---
 
-## 📌 Summary
+## Summary
+
 Sendra is not just a transaction sender.
 It is the execution layer for Solana transactions — ensuring they land reliably under real network conditions.
-
