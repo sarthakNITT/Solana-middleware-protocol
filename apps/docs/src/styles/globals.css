@@ -63,6 +63,10 @@
   body {
     @apply bg-background text-foreground selection:bg-zinc-200 dark:selection:bg-zinc-800;
   }
+
+  button {
+    cursor: pointer !important;
+  }
 }
 
 .no-scrollbar::-webkit-scrollbar {

@@ -27,6 +27,10 @@ body {
   font-feature-settings: "ss01", "ss02", "cv01";
 }
 
+button {
+  cursor: pointer !important;
+}
+
 .font-mono {
   font-family: var(--font-mono) !important;
 }
