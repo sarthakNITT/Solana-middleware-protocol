@@ -70,7 +70,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
             step: "SIMULATION_FAILED",
             message: "failed"
         }, logs, logger);
-        return { success: false, error: simulateResult.error, logs };
+        return { success: false, error: simulateResult.error };
     }
     logEvent({
         step: "SIMULATION_SUCCESS",
@@ -123,7 +123,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
                 rpc: rpc.url,
                 message: signature,
             }, logs, logger);
-            return { ...result, logs };
+            return { ...result, explorerLink: `https://explorer.solana.com/tx/${signature}${rpc.url.includes("devnet") ? "?cluster=devnet" : ""}` };
         } else {
             logEvent({
                 step: "TX_NOT_CONFIRMED",
@@ -196,7 +196,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
                 attempt: attempt,
                 message: "failed"
             }, logs, logger);
-            return { success: false, error: sim.error, logs };
+            return { success: false, error: sim.error };
         }
         logEvent({
             step: "RETRY_SIMULATION_SUCCESS",
@@ -264,7 +264,7 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
                 attempt: attempt,
                 message: signature,
             }, logs, logger);
-            return { ...result, logs };
+            return { ...result, explorerLink: `https://explorer.solana.com/tx/${signature}${currentRpc.url.includes("devnet") ? "?cluster=devnet" : ""}` };
         }
     }
     logEvent({
@@ -274,7 +274,6 @@ export async function SendWithReliability(params: SendraParams, signer: Signer, 
     return {
         success: false,
         error: "Max retries reached",
-        attempts: attempt,
-        logs
+        attempts: attempt
     };
 }

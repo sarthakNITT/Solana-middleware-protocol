@@ -99,11 +99,13 @@ function formatEventForConsole(event: LogEvent): string {
 
         case "TX_CONFIRMED":
             lines.push(`${c.green}${c.bold}  ═══ ✓ Transaction Confirmed On-Chain ═══${c.reset}`);
+            if (event.message) lines.push(`${c.dim}  → Explorer Link: ${c.cyan}https://explorer.solana.com/tx/${event.message}${event.rpc?.includes("devnet") ? "?cluster=devnet" : ""}${c.reset}`);
             if (event.rpc) lines.push(`${c.dim}  → RPC: ${event.rpc}${c.reset}`);
             break;
 
         case "TX_CONFIRMED_AFTER_RETRY":
             lines.push(`${c.green}${c.bold}  ═══ ✓ Confirmed after retry ═══${c.reset}`);
+            if (event.message) lines.push(`${c.dim}  → Explorer Link: ${c.cyan}https://explorer.solana.com/tx/${event.message}${event.rpc?.includes("devnet") ? "?cluster=devnet" : ""}${c.reset}`);
             if (event.attempt !== undefined) lines.push(`${c.dim}  → Total attempts: ${event.attempt}${c.reset}`);
             break;
 

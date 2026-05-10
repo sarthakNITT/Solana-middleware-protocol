@@ -95,7 +95,10 @@ export class FileLogger {
                 break;
             case "TX_CONFIRMED":
             case "TX_CONFIRMED_AFTER_RETRY":
-                if (event.message) output += `Signature: ${event.message}\n`;
+                if (event.message) {
+                    output += `Signature: ${event.message}\n`;
+                    output += `Explorer Link: https://explorer.solana.com/tx/${event.message}${event.rpc?.includes("devnet") ? "?cluster=devnet" : ""}\n`;
+                }
                 if (event.attempt !== undefined) output += `Total Attempts: ${event.attempt}\n`;
                 if (event.rpc) output += `RPC: ${event.rpc}\n`;
                 break;
