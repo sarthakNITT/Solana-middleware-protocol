@@ -64,7 +64,7 @@ export function DocsHeader() {
       >
         <div className="container flex h-14 max-screen-2xl items-center px-4 md:px-8">
           <div className="mr-4 hidden md:flex">
-            <Link href="/" className="mr-6 flex items-center space-x-2">
+            <Link href={process.env.NEXT_PUBLIC_WEB_URL || "http://localhost:3000"} className="mr-6 flex items-center space-x-2">
               <Image
                 src="/logo.png"
                 alt="Sendra Logo"
