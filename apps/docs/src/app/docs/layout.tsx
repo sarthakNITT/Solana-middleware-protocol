@@ -1,3 +1,4 @@
+"use client"
 import { DocsHeader } from "@/components/layout/docs-header";
 import { SidebarNav } from "@/components/docs/sidebar-nav";
 import { ScrollProgress } from "@/components/docs/scroll-progress";

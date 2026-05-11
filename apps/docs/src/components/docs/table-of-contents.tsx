@@ -11,7 +11,7 @@ interface TableOfContentsProps {
 export function TableOfContents({ toc }: TableOfContentsProps) {
   const [activeId, setActiveId] = React.useState<string>("");
   const isAutomaticScroll = React.useRef(false);
-  const scrollTimeout = React.useRef<NodeJS.Timeout>();
+  const scrollTimeout = React.useRef<NodeJS.Timeout | null>(null);
 
   React.useEffect(() => {
     const headings = document.querySelectorAll(

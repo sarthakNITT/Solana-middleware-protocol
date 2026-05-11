@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import { TableOfContents } from "@/components/docs/table-of-contents";
 import { DocsPager } from "@/components/docs/docs-pager";
