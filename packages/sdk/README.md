@@ -54,7 +54,7 @@ import { SendWithReliability } from "sendra-tx";
 const connection = new Connection("https://api.mainnet-beta.solana.com");
 const signer = Keypair.generate();
 const receiver = new PublicKey("11111111111111111111111111111111");
-const amount = 1_000_000; // 0.001 SOL
+const amount = 1_000_000;
 
 async function main() {
   const result = await SendWithReliability({
@@ -79,7 +79,6 @@ Sendra works seamlessly with complex transactions, including swaps, minting, and
 import { VersionedTransaction } from "@solana/web3.js";
 import { SendWithReliability } from "sendra-tx";
 
-// Example for executing a pre-built swap or minting transaction
 async function executeComplexTx(
   connection: Connection,
   signer: Keypair,
@@ -88,7 +87,7 @@ async function executeComplexTx(
   const result = await SendWithReliability({
     connection,
     signer,
-    transaction, // Sendra handles versioned transactions automatically
+    transaction,
     maxRetries: 5
   });
 
