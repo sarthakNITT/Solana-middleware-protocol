@@ -20,6 +20,9 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "Sendra — Transactions that don't fail.",
   description: "Sendra ensures every Solana transaction lands — with simulation, smart routing, and automatic retries.",
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

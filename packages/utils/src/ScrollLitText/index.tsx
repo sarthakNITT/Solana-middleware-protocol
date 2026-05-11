@@ -7,7 +7,7 @@ export function ScrollLitText() {
 
     const { scrollYProgress } = useScroll({
         target: ref,
-        offset: ["start 70%", "start 15%"],
+        offset: ["start 70%", "start -5%"],
     });
 
     const words = "Most transactions fail silently. Users retry. Developers guess. Traditional infrastructure leaves execution unpredictable. Sendra fixes execution at the protocol layer ensuring transactions land reliably, every time. <br> Built for real world Solana conditions where speed matters, congestion happens, and failed transactions cost users money.".split(" ");

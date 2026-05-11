@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   },
   description: "High-reliability transaction execution for Solana.",
   authors: [{ name: "Sendra Protocol" }],
+  icons: {
+    icon: "/logo.png",
+  },
 };
 
 export default function RootLayout({
