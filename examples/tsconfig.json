@@ -9,6 +9,11 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
+    "baseUrl": "..",
+    "paths": {
+      "sendra-tx": ["packages/sdk/src/types.d.ts"],
+      "@repo/types": ["packages/types/src/index.ts"]
+    },
     "noEmit": true,
     "types": ["node"]
   },
